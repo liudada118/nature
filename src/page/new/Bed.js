@@ -1371,12 +1371,13 @@ class Anta extends React.Component {
             {/* </div> */}
 
             <div className="recomContent">
-              <div className="recomItem" style={{height : '40%'}}>
-                <div className="recomInfos"  style={{height : '100%'}}>
+              
+              <div className="recomItem">
+                <div className="recomInfos"  style={{height : '100%' , display : 'flex' , alignItems : 'center'}}>
                   <div className="recomImg" style={{   
-                    // backgroundImage: "url('./img/bed1.png')" ,
-                    width : '100%' , height : '100%'}}>
-                    <img src={bed1} alt="" />
+                    backgroundImage: "url('./img/bed1.png')" ,
+                    width : '100%' }}>
+                    {/* <img src={bed1} alt="" /> */}
                   </div>
                   <div className="recomName">意境床垫</div>
                 </div>
@@ -1395,12 +1396,12 @@ class Anta extends React.Component {
                   })}
                 </div>
               </div>
-              <div className="recomItem" style={{height : '40%'}}>
-                <div className="recomInfos" style={{height : '100%'}}>
+              <div className="recomItem">
+                <div className="recomInfos" style={{height : '100%' , display : 'flex' , alignItems : 'center'}}>
                   <div className="recomImg" style={{   
-                    // backgroundImage: "url('./img/bed1.png')" ,
-                  width : '100%' , height : '100%'}}>
-                    <img src={bed1} alt="" />
+                    backgroundImage: "url('./img/bed1.png')" ,
+                  width : '100%' }}>
+                    {/* <img src={bed1} alt="" /> */}
                   </div>
                   <div className="recomName">意境床垫</div>
                 </div>
@@ -1419,12 +1420,12 @@ class Anta extends React.Component {
                   })}
                 </div>
               </div>
-              <div className="recomItem" style={{height : '40%'}}>
-                <div className="recomInfos" style={{height : '100%'}}>
+              <div className="recomItem">
+                <div className="recomInfos" style={{height : '100%' , display : 'flex' , alignItems : 'center'}}>
                   <div className="recomImg" style={{   
-                    // backgroundImage: "url('./img/bed1.png')" ,
-                    width : '100%' , height : '100%'}}>
-                    <img src={bed1} alt="" />
+                    backgroundImage: "url('./img/bed1.png')" ,
+                    width : '100%' }}>
+                    {/* <img src={bed1} alt="" /> */}
                   </div>
                   <div className="recomName">意境床垫</div>
                 </div>
@@ -1443,12 +1444,12 @@ class Anta extends React.Component {
                   })}
                 </div>
               </div>
-              <div className="recomItem" style={{height : '40%'}}>
-                <div className="recomInfos" style={{height : '100%'}}>
+              <div className="recomItem">
+                <div className="recomInfos" style={{height : '100%' , display : 'flex' , alignItems : 'center'}}>
                   <div className="recomImg" style={{   
-                    // backgroundImage: "url('./img/bed1.png')" ,
-                    width : '100%' , height : '100%'}}>
-                    <img src={bed1} alt="" />
+                    backgroundImage: "url('./img/bed1.png')" ,
+                    width : '100%' }}>
+                    {/* <img src={bed1} alt="" /> */}
                   </div>
                   <div className="recomName">意境床垫</div>
                 </div>

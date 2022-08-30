@@ -206,13 +206,15 @@
 
 .recomContent{
     width: 60%;
-    height: 70%;
+    height: 60%;
     display: flex;
     flex-wrap: wrap;
     color: #fff;
     align-items:center;
-    justify-content: space-between;
+    justify-content: space-around;
 }
+
+.recomBigItem
 
 .recomInfos {
     display: flex;
@@ -221,12 +223,16 @@
 
 }
 
+
+
 .recomItem {
-    flex: 0 0 35%;
+    flex: 0 0 40%;
+    height: 40%;
 }
 
 .recomName{
     white-space: nowrap;
+    font-size: 1rem;
 }
 
 // .recomItem:nth-child(2n-1){
@@ -237,6 +243,10 @@
     font-size: 1.5rem;
     display: flex;
     align-items: center;
+   
+    // justify-content: center;
+    margin-left: 1rem;
+    // width: 100%;
 }
 
 .recomed img {
@@ -335,10 +345,13 @@
 .recomImg{
      background-repeat: no-repeat;
     background-size: contain;
-    background-position: left;
+    background-position: center;
+    width: 100%;
+    height: 100%;
 }
 
 .recomImg img{
+    width: 100%;
     height: 100%;
 }
 .reportContent{
@@ -373,6 +386,7 @@
 
 }
 
+
 .reportRecomName{
     white-space: nowrap;
     font-size: 1.5rem;
@@ -380,7 +394,7 @@
 
 .reportRecomed{
     font-size: 2.5rem;
-    text-align: left;
+    
 }
 .reportRecomed img{
     width: 2rem;

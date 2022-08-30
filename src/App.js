@@ -12,7 +12,7 @@ import './app.css'
 // import Data from './page/num/Data'
 export default function App() {
   return (
-    <HashRouter>
+    <HashRouter >
       <Routes>
         <Route path="/" element={<New />} />
         <Route path="/re" element={<Recom />} />
