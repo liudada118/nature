@@ -1,0 +1,387 @@
+.content.col{
+    ::placeholder {
+        text-align: center;
+      }
+      input{
+        text-align: center;
+      }
+    .testStart{
+        width: 200px ;
+        height: 200px;
+        position : absolute;
+        z-index : 100;
+        color : white;
+        border-radius:0 0 200px 0;
+        background-color :olivedrab;
+        font: 14px/1.5 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
+        font-size: 36px;
+    }
+    .testStartText{
+        padding: 50px;
+    }
+    .content{
+        z-index : 100;
+        position : fixed ;
+        color : red ;
+        left: 0;
+        top : 60%;
+        height: 40%;
+        width: 100%;
+    }
+    .contentItem{
+        height: 50%;
+        flex : 0 0 50%;
+        display : flex;
+        flex-direction : 'column'
+    }
+    .light{
+        position : absolute ;
+        z-index : 101;
+        font-size: 40px;
+        /* left : 20%; */
+        color : white;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items : center;
+        justify-content : center;
+        flex-flow: column;
+        background-color: rgba(0,0,0,0.5);
+        /* opacity: 0.9; */
+        display : none
+    }
+    .lightIcon{
+        font-size: 60px;
+    }
+    .footModel{
+        height: calc(30% - 8px);
+    }
+    .footModel>div{
+        padding : 8px !important
+    }
+    
+    @keyframes ok{
+        0%  {transform : scale(0) }
+        100% {transform : scale(1) }
+    }
+    
+    .light img{
+        width: 15%;
+        animation: ok 1s;
+        /* transition : all 1s; */
+        /* height: 80%; */
+    }
+    .twoProgressImg{
+        position: relative;
+    }
+    .twoProgressText{
+        position : absolute;
+        top: 50%;
+        left : 50%;
+        transform : translate(-50%,-50%) ;
+        color : white;
+        font-size: 80px;
+        font-weight : bold
+    }
+    .threeProgressImg{
+        position : absolute;
+        /* z-index: 1233232; */
+        display : flex;
+        /* padding : 20px */
+        color: #fff;
+        width: 100%;
+        height: 100%;
+        align-items : center;
+        justify-content : center;
+        background-color: #070822;
+    }
+    .threeLeftInfo{
+        border-right : 1px solid #999;
+        display: flex;
+        flex-flow : column;
+        height: 100%;
+        /* padding-right: 10%; */
+    }
+    .threeRightInfo{
+        display: flex;
+        flex-flow : column;
+        height: 100%;
+        /* padding-left: 10%; */
+    }
+    .threeLeftText{
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+    }
+    .threeRightText{
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+    }
+    .threeProgress{
+        background-color: #070b21;
+        border : 0px;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+    .threeLeftInfo{
+        padding-right: 10%;
+    }
+    .threeRightInfo{
+        padding-left:  10%;
+    }
+    .leftIcon{
+        display: inline;
+        color : green ;
+        /* background-color : 'white' ; */
+        display : inline
+    }
+    .rightIcon{
+        display: inline;
+        color : green ;
+        /* background-color : 'white' ; */
+        display : inline
+    }
+    .threeProgress>div{
+        height: 100%;
+    }
+    .threeRightImg{
+        height: 80%;
+    }
+    .threeRightImg img{
+        height: 100%;
+    }
+    .threeLeftImg{
+        height: 80%;
+    }
+    .threeLeftImg img{
+        height: 100%;
+    }
+    .contents{
+        z-index : 100;
+        position : absolute ;
+        color : red ;
+        right: 0;
+        top : 0;
+        height: 100%;
+        width: 35%;
+        display: flex;
+        justify-content : center;
+        align-items : center;
+    }
+    .contentsList{
+        color : #fff;
+        font-size: 48px;
+        list-style: none;
+    }
+    .TextColor{
+        background :linear-gradient(to right, #266689, #67a7bb);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+    .trainTypeInfo img{
+        width: 100%;
+    }
+    
+    
+    .infoCard{
+        display: flex;
+        height: 30%;
+    }
+    .footbgc{
+        background-color: #10152b;
+        border: 2px solid black
+    }
+    .footTypeInfo {
+        font-size: 38px;
+        font-weight :bold
+    }
+    .trainTypeInfo {
+        font-size: 38px;
+        font-weight :bold
+    }
+    .trainCard{
+        background-color: #10152b;
+    }
+    .textGradeColor{
+        background :linear-gradient(to right, #266689, #67a7bb);
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 24px;
+        margin-top: 36px;
+    }
+    .whiteColor{
+        color : #83889d;
+        font-size : 16px;
+    }
+    .detailInfoCard{
+        display : flex;
+        height: 70%;
+    }
+    .trainInfo{
+        display : flex;
+        flex-wrap: nowrap;
+        height: 40%;
+    }
+    .pronationInfo{
+        font-size: 60px;
+        font-weight :bold;
+        /* width: 60%; */
+    }
+    .trainProportion{
+        font-size: 60px;
+        font-weight :bold
+    }
+    .cordCard{
+        /* display : flex; */
+        /* align-items : center;
+        justify-content : center; */
+        position: relative;
+        width: 20%;
+        text-align: center;
+    }
+    .cordProgress{
+        margin-top: 20px;
+        width: 16px;
+        height: 75%;
+        background :linear-gradient(to bottom, #266689, #67a7bb);
+        border-radius: 8px;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%)
+    }
+    .footInfo{
+        position: relative;
+        height: 60%;
+        display: flex;
+        flex-direction: column;
+    }
+    .footProgress{
+        margin-top: 22px;
+        height: 16px;
+        width: 100%;
+        background :linear-gradient(to right, #266689, #67a7bb);
+        border-radius: 8px;
+        position: relative;
+    }
+    .cordProgressAddress{
+        height: 8%;
+        width: 16px;
+        background-color: #2dd5d1;
+        border-radius: 8px;
+        position: absolute;
+        bottom: 0;
+    }
+    .footProgressAddress{
+        height: 16px;
+        width: 8%;
+        background-color: #2dd5d1;
+        border-radius: 8px;
+        position: absolute
+    }
+    .train{
+        width: 30%;
+    }
+    .footCard{
+        height: 100%;
+    }
+    .showCard{
+        width: 55%;
+    }
+    .trainCard{
+        width: 45%;
+    }
+    .moreInfoCard{
+        width: 80%;
+    }
+    .pronation{
+        width: 70%;
+    }
+    
+    .flexcenter{
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .flexTitle{
+        position: absolute;
+        top: 8px;
+        left: 8px;
+    }
+    
+    .inputCard{
+        display: flex;
+        padding: 40px 40px;
+        background-color: rgb(16, 21, 43);
+        border-radius: 20px;
+        z-index: 20;
+    }
+    
+    @media screen and (min-width: 768px) {
+        .inputCard{
+            display: flex;
+            padding: 80px 160px;
+            background-color: rgb(16, 21, 43);
+            border-radius: 20px;
+            z-index: 20;
+        }
+        .textGradeColor{
+            font-size: 36px;
+        }
+        .content {
+            right: 0;
+            top: 0;
+            width: 35%;
+            height: 100%;
+            left: unset;
+        }
+        .whiteColor{
+            font-size: 24px;
+        }
+        .cordProgress{
+            width: 24px;
+            border-radius: 12px;
+        }
+        .cordProgressAddress{
+            width: 24px;
+        }
+        .footProgressAddress{
+            height: 24px;
+        }
+        .footProgress{
+            height: 24px;
+            border-radius: 12px;
+        }
+        .cordProgressAddress{
+            border-radius:  12px;
+        }
+        .footProgressAddress{
+            border-radius: 12px;
+        }
+        .pronationInfo {
+            font-size: 30px!important;
+        }
+        .leg.textGradeColor{
+            font-size: 28px;
+        }
+        .item1{
+            flex: 0 0 32.5%;
+        }
+        .item2{
+            flex: 0 0 32.5%;
+        }
+        .item3{
+            flex: 0 0 32.5%;
+        }
+      }
+      @media screen and (max-width: 768px){
+        .com{
+           flex-direction: column;
+           background-color: rgba(0, 0, 0,0);
+        }
+      }
+    
+}
