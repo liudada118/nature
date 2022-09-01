@@ -64,6 +64,7 @@
 
 .postInfo{
     margin-right: 2rem;
+    width: 8rem;
 }
 
 .postContent{
@@ -74,6 +75,7 @@
     display: flex;
     position: relative;
     align-items: center;
+
 }
 
 .progressStrip {
@@ -149,7 +151,7 @@
     color: #fff;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0,0,0,0.7);
+    background-color: #000;
     position: absolute;
     z-index: 300;
     top: 0;

@@ -4,7 +4,7 @@ import React, { useMemo, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "react-three-fiber";
 import Controls from "./Controls";
 import { TextureLoader } from "three";
-import 'antd/dist/antd.css'
+import "antd/dist/antd.css";
 import Compute from "../../assets/js/Compute";
 // import "./anta copy.css";
 import litter from "../../assets/images/litter.png";
@@ -21,6 +21,7 @@ import feature from "../../assets/images/feature.png";
 import bed1 from "../../assets/images/bed1.png";
 import down from "../../assets/images/down.png";
 import { Select, Modal, Input, Button } from "antd";
+import axios from "axios";
 import { jet1 } from "../../assets/js/util";
 import view from "../../assets/image1/view.png";
 import item from "../../assets/image1/item.png";
@@ -39,8 +40,8 @@ import body from "../../assets/image1/body.png";
 // import bed1 from '../../assets/images/bed1.png'
 // import star from '../../assets/image1/star.png'
 // import bed1 from '../../assets/images/bed1.png'
-import domtoimage from 'dom-to-image';
-import { saveAs } from 'file-saver';
+import domtoimage from "dom-to-image";
+import { saveAs } from "file-saver";
 import "./bed.scss";
 // let bdata = 0
 // let adata = 0
@@ -74,13 +75,13 @@ const bedArr = [
   "心境系列",
   "尚境系列",
   "意境系列",
-  "强护脊",
+  "强护脊系列",
   "生态英雄",
   "净界系列",
   "正棕Z3系列",
   "正棕Z5系列",
   "Z6心境系列",
-  "新幻境",
+  "新幻境系列",
   "梵境系列",
   "翡洛奇（丝蒂娜）",
   "翡洛奇（苏菲雅）",
@@ -113,8 +114,10 @@ const id = new Date().getTime();
 let nowId;
 let newDate = new Date().getTime(),
   oldDate;
-let DataFlag = false;
-
+let DataFlag = false,
+  buttonFlag = false;
+let progress = 50;
+let rotateZ = 0;
 function Particles(props) {
   let i = 1;
 
@@ -171,43 +174,82 @@ function Particles(props) {
     if (DataFlag) {
       // i = 1
 
-      state.gl.clear();
+      // state.gl.clear();
       // state.gl.dispose();
       // attrib.current.geometry.dispose();
       // console.log(state,attrib)
-      if (props.item === 2) {
-        // state.camera.position.z = 2
-      } else {
-        state.camera.position.z = 0;
-      }
-
-      if (
-        (parseInt(cameraPosition.x) !== parseInt(state.camera.position.x) ||
-          parseInt(cameraPosition.y) !== parseInt(state.camera.position.y) ||
-          parseInt(cameraPosition.z) !== parseInt(state.camera.position.z)) &&
-        cameraFlag
-      ) {
-        if (configWs.readyState === 1) {
-          configWs.send(
-            JSON.stringify({
-              camera: state.camera.position,
-              cameraRotation: state.camera.rotation,
-              id,
-            })
-          );
+      if (buttonFlag) {
+        if (props.item === 2) {
+          state.camera.position.z = 2;
+          newState = [-Math.PI / 8, 0, 0];
+          state.camera.rotation.x = -Math.PI / 2;
+          state.camera.rotation.y = 0;
+          state.camera.rotation.z = 0;
+          state.scene.children[2].rotation.x = newState[0];
+          state.scene.children[2].rotation.y = newState[1];
+          state.scene.children[2].rotation.z = newState[2];
+          // DataFlag = false;
+          // return
+        } else if (props.item === 1) {
+          state.camera.position.z = 0;
+          // if()
+          state.camera.position.y = 1400;
+          state.camera.position.x = 0;
+          state.camera.rotation.x = -Math.PI / 2;
+          state.camera.rotation.y = 0;
+          state.camera.rotation.z = 0;
+          newState = [-Math.PI / 2, 0, 0];
+          state.scene.children[2].rotation.x = newState[0];
+          state.scene.children[2].rotation.y = newState[1];
+          state.scene.children[2].rotation.z = newState[2];
+          // DataFlag = false;
+          // return
+          // oldState = [0,0,0]
+        } else if (props.item === 0) {
+          state.camera.position.z = 0;
+          state.camera.position.y = 1400;
+          state.camera.position.x = 0;
+          state.camera.rotation.x = -Math.PI / 2;
+          state.camera.rotation.y = 0;
+          state.camera.rotation.z = 0;
+          newState = [0, 0, 0];
+          state.scene.children[2].rotation.x = newState[0];
+          state.scene.children[2].rotation.y = newState[1];
+          state.scene.children[2].rotation.z = newState[2];
+          // DataFlag = false;
+          // return
+          // oldState = [-Math.PI/2,0,0]
         }
       }
+      buttonFlag = false;
+      console.log(state.camera.rotation);
+      // if (
+      //   (parseInt(cameraPosition.x) !== parseInt(state.camera.position.x) ||
+      //     parseInt(cameraPosition.y) !== parseInt(state.camera.position.y) ||
+      //     parseInt(cameraPosition.z) !== parseInt(state.camera.position.z)) &&
+      //   cameraFlag
+      // ) {
+      //   if (configWs.readyState === 1) {
+      //     configWs.send(
+      //       JSON.stringify({
+      //         camera: state.camera.position,
+      //         cameraRotation: state.camera.rotation,
+      //         id,
+      //       })
+      //     );
+      //   }
+      // }
 
-      if (ws.readyState === 1) {
-        // state.camera.position.x = cameraX
-        // state.camera.position.y = cameraY
-        // state.camera.position.z = cameraZ
-        // state.camera.rotation.x = cameraRotationX
-        // state.camera.rotation.y = cameraRotationY
-        // state.camera.rotation.z = cameraRotationZ
-        // console.log(state.camera.rotation.x)
-      }
-      // // console.log(JSON.stringify(oldState) != JSON.stringify(newState),[state.camera.rotation.x,state.camera.rotation.y,state.camera.rotation.z,] ,newState,'rotation')
+      // if (ws.readyState === 1) {
+      //   // state.camera.position.x = cameraX
+      //   // state.camera.position.y = cameraY
+      //   // state.camera.position.z = cameraZ
+      //   // state.camera.rotation.x = cameraRotationX
+      //   // state.camera.rotation.y = cameraRotationY
+      //   // state.camera.rotation.z = cameraRotationZ
+      //   // console.log(state.camera.rotation.x)
+      // }
+      // // // console.log(JSON.stringify(oldState) != JSON.stringify(newState),[state.camera.rotation.x,state.camera.rotation.y,state.camera.rotation.z,] ,newState,'rotation')
       if (
         ws.readyState === 1 &&
         JSON.stringify(oldState) != JSON.stringify(newState)
@@ -215,10 +257,10 @@ function Particles(props) {
         // state.camera.rotation.x = newState[0]
         // state.camera.rotation.y = newState[1]
         // state.camera.rotation.z = newState[2]
-        oldState = newState;
-        state.scene.children[2].rotation.x = newState[0];
-        state.scene.children[2].rotation.y = newState[1];
-        state.scene.children[2].rotation.z = newState[2];
+        // oldState = newState;
+        // state.scene.children[2].rotation.x = newState[0];
+        // state.scene.children[2].rotation.y = newState[1];
+        // state.scene.children[2].rotation.z = newState[2];
       }
 
       //线性插值
@@ -341,9 +383,10 @@ class Anta extends React.Component {
     if (wsFlag) {
       wsFlag = false;
     }
-    if (jsonObject) {
-      jsonObject = null;
-    }
+
+    // if (jsonObject) {
+    //   jsonObject = null;
+    // }
     let jsonObject = JSON.parse(e.data);
     //处理空数组
     if (jsonObject.data != null) {
@@ -386,19 +429,39 @@ class Anta extends React.Component {
        * 计算压力最大面积，最大值，平均值
        * */
     } else {
+      // console.log(jsonObject)
+      progress = progress + (jsonObject.hardness_degree - progress) / 10;
+
       this.setState({
         sleep_pos:
-          jsonObject.sleep_pos === 0
+          jsonObject.sleeping_pos === 0
             ? "无人"
-            : jsonObject.sleep_pos === 1
-            ? "平躺"
-            : jsonObject.sleep_pos === 2
-            ? "侧躺"
-            : jsonObject.sleep_pos === 3
-            ? "趴睡"
-            : "坐着",
+            : jsonObject.sleeping_pos === 1
+            ? "仰卧"
+            : jsonObject.sleeping_pos === 2
+            ? "侧卧"
+            : jsonObject.sleeping_pos === 3
+            ? "重物"
+            : "--",
         breatheData: jsonObject.breath_rate,
         moveData: jsonObject.bodymove_data,
+        spine:
+          jsonObject.spine_curvature == -1
+            ? "无"
+            : jsonObject.spine_curvature == 0
+            ? "平躺正常"
+            : jsonObject.spine_curvature == 1
+            ? "平躺弯曲"
+            : jsonObject.spine_curvature == 2
+            ? "平躺严重弯曲"
+            : jsonObject.spine_curvature == 3
+            ? "侧躺正常"
+            : jsonObject.spine_curvature == 4
+            ? "侧躺弯曲"
+            : jsonObject.spine_curvature == 5
+            ? "侧躺严重弯曲"
+            : "--",
+        hardness: progress,
       });
     }
   }
@@ -630,7 +693,7 @@ class Anta extends React.Component {
     }, 380);
   }
 
-  hiddenRealReport(){
+  hiddenRealReport() {
     const page = document.querySelector(".reportPage");
     page.style.display = "none";
   }
@@ -644,6 +707,14 @@ class Anta extends React.Component {
       page1.style.visibility = "hidden";
     }, 380);
 
+    const breath = this.state.breatheData;
+    const move = this.state.moveData;
+    const press = this.state.press;
+    this.setState({
+      nowBreath: breath,
+      nowMove: move,
+      nowPress: press,
+    });
     const page = document.querySelector(".reportPage");
     // page.style.transform = `translateY(40px)`
     // page.style.opacity = 0
@@ -713,6 +784,9 @@ class Anta extends React.Component {
       cameraZ: 0,
       cameraFlag: false,
       id: 0,
+      nowBreath: 0,
+      nowMove: 0,
+      nowPress: 0,
       cameraY: window.innerWidth > 1020 ? 1400 : 1000,
       display: false,
       click: false,
@@ -724,6 +798,11 @@ class Anta extends React.Component {
       phone: "",
       name: "",
       sex: "",
+      recomBed: {},
+      recomItem: 0,
+      hardness: 50,
+      spine: "",
+      buttonFlag : false
     };
     this.cameraX = 0;
     this.cameraY = 1400;
@@ -746,6 +825,11 @@ class Anta extends React.Component {
     }
   }
 
+  changeButtonFlag(value){
+    this.setState({
+      buttonFlag : value
+    })
+  }
   changeValueg(value) {
     this.setState({ valueg: value });
   }
@@ -780,6 +864,532 @@ class Anta extends React.Component {
     page.style.opacity = 1;
     page.style.transition = `all 0.4s`;
     // console.log(page.style)
+
+    if (this.state.bed === "新幻境系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: {
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            正棕Z5系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: {
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            正棕Z5系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+          },
+        });
+      }
+    } else if (this.state.bed === "新梦境系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: {
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            正棕Z5系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: {
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            正棕Z5系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+          },
+        });
+      }
+    } else if (this.state.bed === "正棕Z5系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: {
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            正棕Z5系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: {
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      }
+    } else if (this.state.bed === "Z6心境系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: {
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: {
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      }
+    } else if (this.state.bed === "净界系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: {
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      }
+    } else if (this.state.bed === "强护脊系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: {
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      }
+    } else if (this.state.bed === "意境系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: {
+            意境系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+
+            净界系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            强护脊系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            Z6心境系列: {
+              img: "./img/bed1.png",
+              num: 3,
+            },
+          },
+        });
+      }
+    } else if (
+      this.state.bed === "X7臻耀系列" ||
+      this.state.bed === "S冠军系列" ||
+      this.state.bed === "S3系列"
+    ) {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: {
+            X7臻耀系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            S冠军系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            S3系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: {
+            S冠军系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+            X7臻耀系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            S3系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+          },
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: {
+            S3系列: {
+              img: "./img/bed1.png",
+              num: 5,
+            },
+
+            X7臻耀系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+            S冠军系列: {
+              img: "./img/bed1.png",
+              num: 4,
+            },
+          },
+        });
+      }
+    } else {
+      this.setState({
+        recomBed: {},
+      });
+    }
   }
 
   hiddenRecom() {
@@ -793,6 +1403,14 @@ class Anta extends React.Component {
   }
 
   changeItem() {
+    const img = document.querySelector(".viewImg");
+    rotateZ += 1;
+    img.style.transform = `rotateZ(${rotateZ * 90}deg)`;
+    img.style.transition = `all 0.5s`;
+    buttonFlag = true;
+    this.setState({
+      buttonFlag: true
+    })
     if (this.state.item <= 1) {
       this.setState(
         {
@@ -814,7 +1432,7 @@ class Anta extends React.Component {
               );
             }
           } else if (this.state.item === 2) {
-            this.changeRotation(-Math.PI / 8, 0, 0);
+            this.changeRotation(-Math.PI / 8, 0, 2);
             this.setState({
               cameraZ: 2,
             });
@@ -822,7 +1440,7 @@ class Anta extends React.Component {
               configWs.send(
                 JSON.stringify({
                   item: this.state.item,
-                  rotation: [-Math.PI / 8, 0, 0],
+                  rotation: [-Math.PI / 8, 0, 2],
                   id,
                 })
               );
@@ -910,18 +1528,57 @@ class Anta extends React.Component {
     cameraFlag = value;
   }
 
-  getBlobPng  () {
-    console.log('png')
-        const node = document.getElementById("node");
-        domtoimage.toBlob(node).then((blob) => {
-            // 调用file-save方法 直接保存图片
-            saveAs(blob, '自动保存.png')
-        })
-    }
+  getBlobPng() {
+    console.log("png");
+    const node = document.getElementById("node");
+    domtoimage.toBlob(node).then((blob) => {
+      // 调用file-save方法 直接保存图片
+      saveAs(blob, "自动保存.png");
+    });
+  }
 
   render() {
     return (
       <>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            width: "4rem",
+            height: "4rem",
+            zIndex: 500,
+          }}
+          onClick={() => {
+            this.setState({ recomItem: 0 });
+          }}
+        ></div>
+        <div
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            width: "4rem",
+            height: "4rem",
+            zIndex: 500,
+          }}
+          onClick={() => {
+            this.setState({ recomItem: 1 });
+          }}
+        ></div>
+        <div
+          style={{
+            position: "fixed",
+            bottom: 0,
+            right: 0,
+            width: "4rem",
+            height: "4rem",
+            zIndex: 500,
+          }}
+          onClick={() => {
+            this.setState({ recomItem: 2 });
+          }}
+        ></div>
         <div
           style={{
             width: "100%",
@@ -981,6 +1638,15 @@ class Anta extends React.Component {
                 this.setState({
                   bed: value,
                 });
+                axios
+                  .get(
+                    `http://192.168.31.40:8080/setBedName?bedName=${bedArr.indexOf(
+                      value
+                    )}`
+                  )
+                  .then((res) => {
+                    console.log(res);
+                  });
                 if (configWs.readyState === 1) {
                   configWs.send(
                     JSON.stringify({
@@ -1016,31 +1682,64 @@ class Anta extends React.Component {
           >
             <div className="font">
               <img
+                className="viewImg"
                 onClick={this.changeItem.bind(this)}
-                style={{ width: "50px", height: "50px", marginRight: 10 }}
+                style={{ width: "50px", height: "50px" }}
                 src={view}
                 alt=""
               />
-              <span style={{ lineHeight: "50px" }}>
+              <span style={{ lineHeight: "50px", marginLeft: 10 }}>
                 {itemArr[this.state.item]}
               </span>
             </div>
 
             <div className="dataContent fontFounder">
-              <div>
+              <div style={{ fontSize: "0.8rem" }}>
                 <div className="comfortTitle">床垫舒适度</div>
                 <div className="postContent">
                   <div className="postInfo">
                     <div className="post">睡姿:{this.state.sleep_pos}</div>
-                    <div className="spine">脊柱:正常</div>
+                    <div className="spine">脊柱:{this.state.spine}</div>
                   </div>
                   <div className="postImg">
-                    <img src={sleep1} alt="" />
+                    <img
+                      src={sleep1}
+                      style={{
+                        display:
+                          this.state.sleep_pos === "仰卧" ? "unset" : "none",
+                      }}
+                      alt=""
+                    />
+                    <img
+                      src={sleep2}
+                      style={{
+                        display:
+                          this.state.sleep_pos === "侧卧" ? "unset" : "none",
+                      }}
+                      alt=""
+                    />
+                    <img
+                      src={sleep2}
+                      style={{
+                        display:
+                          this.state.sleep_pos != "侧卧" &&
+                          this.state.sleep_pos != "仰卧"
+                            ? "unset"
+                            : "none",
+                      }}
+                      alt=""
+                    />
                   </div>
                 </div>
                 <div className="degreeProgress">
                   <div className="progressStrip"></div>
-                  <div className="progressRound"></div>
+                  <div
+                    className="progressRound"
+                    style={{
+                      position: "absolute",
+                      left: `${this.state.hardness}%`,
+                    }}
+                  ></div>
                 </div>
                 <div className="degreeInfo">
                   <div>偏软</div>
@@ -1051,7 +1750,7 @@ class Anta extends React.Component {
                 <img className="dataItemImg" src={item} alt="" />
                 <div>
                   <div>呼吸</div>
-                  <div>{this.state.breatheData}次/min</div>
+                  <div>{this.state.breatheData.toFixed(0)}次/min</div>
                 </div>
               </div>
               <div className="dataItem">
@@ -1258,6 +1957,7 @@ class Anta extends React.Component {
                   zoom: 1,
                   fov: 65,
                   position: [0, this.state.cameraY, this.state.cameraZ],
+                  rotation: [-Math.PI/2, 0, 0],
                   near: 1,
                   far: 10000,
                 }}
@@ -1267,8 +1967,11 @@ class Anta extends React.Component {
                 <ambientLight intensity={0.01} />
                 <color attach="background" args={["#070822"]} />
                 <Controls
-                  cameraFlag={this.state.cameraFlag}
-                  changeCameraFlag={this.changeCameraFlag.bind(this)}
+                  item={this.state.item}
+                  buttonFlag={this.state.buttonFlag}
+                  changeButtonFlag = {this.changeButtonFlag.bind(this)}
+                  // cameraFlag={this.state.cameraFlag}
+                  // changeCameraFlag={this.changeCameraFlag.bind(this)}
                 />
                 {/* <OrthographicCamera left={-window.innerWidth*0.65/2} right={window.innerWidth*0.65/2} top={window.innerHeight/2} bottom={-window.innerHeight/2} near={1} far={10000} 
                  /> */}
@@ -1361,7 +2064,8 @@ class Anta extends React.Component {
               </div>
             </div>
           </div>
-          <div  className="recomPage"
+          <div
+            className="recomPage"
             onClick={() => {
               this.hiddenRecom();
             }}
@@ -1371,20 +2075,70 @@ class Anta extends React.Component {
             {/* </div> */}
 
             <div className="recomContent">
-              
-              <div className="recomItem">
+              {Object.keys(this.state.recomBed).map((item, index) => {
+                // console.log(this.state.recomBed[item]?.num)
+                return (
+                  <div className="recomItem">
+                    <div
+                      className="recomInfos"
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        className="recomImg"
+                        style={{
+                          backgroundImage: `url(${this.state.recomBed[item].img})`,
+                          width: "100%",
+                        }}
+                      >
+                        {/* <img src={bed1} alt="" /> */}
+                      </div>
+                      <div className="recomName">{item}</div>
+                    </div>
+                    <div className="recomed">
+                      推荐指数:
+                      {new Array(5).fill(0).map((items, indexs) => {
+                        return (
+                          <img
+                            key={indexs}
+                            style={{
+                              display:
+                                indexs < this.state.recomBed[item].num
+                                  ? "unset"
+                                  : "none",
+                            }}
+                            src={star}
+                            alt=""
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {Object.keys(this.state.recomBed).length == 0 ? (
+                <div style={{ fontSize: "2rem" }}>
+                  Please select the current mattress style
+                </div>
+              ) : null}
+
+              {/* <div className="recomItem">
                 <div className="recomInfos"  style={{height : '100%' , display : 'flex' , alignItems : 'center'}}>
                   <div className="recomImg" style={{   
                     backgroundImage: "url('./img/bed1.png')" ,
                     width : '100%' }}>
-                    {/* <img src={bed1} alt="" /> */}
+                
                   </div>
                   <div className="recomName">意境床垫</div>
                 </div>
                 <div className="recomed">
                   推荐指数:
                   {new Array(5).fill(0).map((item, index) => {
-                    console.log(index);
+                  
                     return (
                       <img
                         key={index}
@@ -1401,14 +2155,14 @@ class Anta extends React.Component {
                   <div className="recomImg" style={{   
                     backgroundImage: "url('./img/bed1.png')" ,
                   width : '100%' }}>
-                    {/* <img src={bed1} alt="" /> */}
+               
                   </div>
                   <div className="recomName">意境床垫</div>
                 </div>
                 <div className="recomed">
                   推荐指数:
                   {new Array(5).fill(0).map((item, index) => {
-                    console.log(index);
+               
                     return (
                       <img
                         key={index}
@@ -1425,14 +2179,14 @@ class Anta extends React.Component {
                   <div className="recomImg" style={{   
                     backgroundImage: "url('./img/bed1.png')" ,
                     width : '100%' }}>
-                    {/* <img src={bed1} alt="" /> */}
+               
                   </div>
                   <div className="recomName">意境床垫</div>
                 </div>
                 <div className="recomed">
                   推荐指数:
                   {new Array(5).fill(0).map((item, index) => {
-                    console.log(index);
+               
                     return (
                       <img
                         key={index}
@@ -1449,14 +2203,14 @@ class Anta extends React.Component {
                   <div className="recomImg" style={{   
                     backgroundImage: "url('./img/bed1.png')" ,
                     width : '100%' }}>
-                    {/* <img src={bed1} alt="" /> */}
+           
                   </div>
                   <div className="recomName">意境床垫</div>
                 </div>
                 <div className="recomed">
                   推荐指数:
                   {new Array(5).fill(0).map((item, index) => {
-                    console.log(index);
+               
                     return (
                       <img
                         key={index}
@@ -1467,13 +2221,24 @@ class Anta extends React.Component {
                     );
                   })}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
 
-        <div className="reportPage" onClick={() => {this.hiddenRealReport()}}>
-          <div id="node" className="reportContent" onClick={(event) => { event.stopPropagation();}}>
+        <div
+          className="reportPage"
+          onClick={() => {
+            this.hiddenRealReport();
+          }}
+        >
+          <div
+            id="node"
+            className="reportContent"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
             <div className="reportTitle">
               <img src={nature} alt="" />
               <img src={titleRight} alt="" />
@@ -1495,21 +2260,21 @@ class Anta extends React.Component {
                 <img className="dataItemImg" src={item} alt="" />
                 <div>
                   <div>呼吸</div>
-                  <div>32次/min</div>
+                  <div>{this.state.nowBreath}次/min</div>
                 </div>
               </div>
               <div className="dataItem">
                 <img className="dataItemImg" src={item} alt="" />
                 <div>
                   <div>体动</div>
-                  <div>6次/min</div>
+                  <div>{this.state.nowMove}次/min</div>
                 </div>
               </div>
               <div className="dataItem">
                 <img className="dataItemImg" src={item} alt="" />
                 <div>
                   <div>平均压力</div>
-                  <div>38mmhg</div>
+                  <div>{this.state.nowPress.toFixed(0)}mmhg</div>
                 </div>
               </div>
             </div>
@@ -1526,7 +2291,6 @@ class Anta extends React.Component {
                 <div className="reportRecomed">
                   推荐指数:
                   {new Array(5).fill(0).map((item, index) => {
-                    console.log(index);
                     return (
                       <img
                         key={index}
@@ -1540,10 +2304,25 @@ class Anta extends React.Component {
               </div>
             </div>
           </div>
-          <div style={{width : '80%' , backgroundColor : '#0f0f40' , padding : '20px' ,display : 'flex' ,alignItems : 'center'  , justifyContent : 'center'}}>
-          <Button onClick={(event) => { this.getBlobPng(); event.stopPropagation();}}>导出png</Button>
+          <div
+            style={{
+              width: "80%",
+              backgroundColor: "#0f0f40",
+              padding: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              onClick={(event) => {
+                this.getBlobPng();
+                event.stopPropagation();
+              }}
+            >
+              导出png
+            </Button>
           </div>
-          
         </div>
       </>
     );
