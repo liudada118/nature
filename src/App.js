@@ -8,7 +8,8 @@ import Recom from './page/new/Recom'
 import Report from './page/new/Report'
 import './app.css'
 // import Demo from './page/home/Demo'
-// import Col from './page/col/Bed'
+import Col from './page/col/Bed'
+import Col1 from './page/col copy/Bed'
 // import Data from './page/num/Data'
 export default function App() {
   return (
@@ -18,7 +19,8 @@ export default function App() {
         <Route path="/re" element={<Recom />} />
         <Route path="/report" element={<Report />} />
         {/* <Route path="/bed" element={<Bed />} /> */}
-        {/* <Route path="/" element={<Col />} /> */}
+        <Route path="/col" element={<Col />} />
+        <Route path="/col1" element={<Col1 />} />
         {/* <Route path="/demo" element={<Demo />} /> */}
       </Routes>
     </HashRouter>

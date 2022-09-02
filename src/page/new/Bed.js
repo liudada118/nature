@@ -62,12 +62,17 @@ let ws, configWs;
 let pageClose = false;
 
 let newState = [0, 0, 0],
-  oldState = [0, 0, 0];
+  oldState = [0, 0, 0],
+  oldCameraPosition ='{}',
+  newCameraPosition = '{}',
+  oldCameraRotation ='{}',
+  newCameraRotation = '{}'
 const { Option } = Select;
 let sleepType;
 let timerErr;
 let wsFlag = false;
 let computeResult;
+let changeItem = 0
 const itemArr = ["俯视图", "平视图", "三维图", "设置"];
 const bedArr = [
   "梦境经典",
@@ -101,6 +106,7 @@ const bedArr = [
   "清新PLUS系列",
   "荣耀V11",
 ];
+let endFlag = true;
 let cameraPosition = {};
 let cameraX = 0;
 let cameraRotationX = 0;
@@ -118,191 +124,101 @@ let DataFlag = false,
   buttonFlag = false;
 let progress = 50;
 let rotateZ = 0;
+
 function Particles(props) {
-  let i = 1;
-
-  const spite = new TextureLoader().load(
-    require("../../assets/images/circle.png")
-  );
-  const attrib = useRef();
-
-  useEffect(() => {
-    return () => {
-      console.log("return");
-    };
-  });
+  const spite = new TextureLoader().load(require('../../assets/images/circle.png'))
+  const attrib = useRef()
 
   //变量放到内存，高速调用
   const [positions, colors] = useMemo(() => {
     let positions = [],
-      colors = [];
+      colors = []
     let i = 0,
-      j = 0;
+      j = 0
     for (let iy = 0; iy < AMOUNTX; iy++) {
       for (let ix = 0; ix < AMOUNTY; ix++) {
-        positions[i] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2 - 1500 + ix; // x
-        positions[i + 1] = 0; // y
-        positions[i + 2] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2 + 500; // z
+        positions[i] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2 - 1500 + ix // x
+        positions[i + 1] = 0 // y
+        positions[i + 2] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2 + 500 // z
 
-        colors[i] = 1;
-        colors[i + 1] = 0.1;
-        colors[i + 2] = 0;
+        colors[i] = 1
+        colors[i + 1] = 0.1
+        colors[i + 2] = 0
 
-        i += 3;
-        j++;
+        i += 3
+        j++
       }
     }
 
-    return [new Float32Array(positions), new Float32Array(colors)];
+    return [new Float32Array(positions), new Float32Array(colors)]
     // }, [pointCount]);
-  });
+  })
 
   let fSmooth = 0,
-    LSmooth = 0;
-  useFrame((state, delta) => {
+    LSmooth = 0
+  useFrame(state => {
     // state.camera.lookAt(0,0,0)
 
-    // if (i < 6) {
-    //   i++
-    //   wsPointData = null;
-    //   wsPointData1= null;
-    //   bigArrg = null;
-    //   bigArrp = null;
-    //   smoothBig = null;
-    // } else
-
-    if (DataFlag) {
-      // i = 1
-
-      // state.gl.clear();
-      // state.gl.dispose();
-      // attrib.current.geometry.dispose();
-      // console.log(state,attrib)
-      if (buttonFlag) {
-        if (props.item === 2) {
-          state.camera.position.z = 2;
-          newState = [-Math.PI / 8, 0, 0];
-          state.camera.rotation.x = -Math.PI / 2;
-          state.camera.rotation.y = 0;
-          state.camera.rotation.z = 0;
-          state.scene.children[2].rotation.x = newState[0];
-          state.scene.children[2].rotation.y = newState[1];
-          state.scene.children[2].rotation.z = newState[2];
-          // DataFlag = false;
-          // return
-        } else if (props.item === 1) {
-          state.camera.position.z = 0;
-          // if()
-          state.camera.position.y = 1400;
-          state.camera.position.x = 0;
-          state.camera.rotation.x = -Math.PI / 2;
-          state.camera.rotation.y = 0;
-          state.camera.rotation.z = 0;
-          newState = [-Math.PI / 2, 0, 0];
-          state.scene.children[2].rotation.x = newState[0];
-          state.scene.children[2].rotation.y = newState[1];
-          state.scene.children[2].rotation.z = newState[2];
-          // DataFlag = false;
-          // return
-          // oldState = [0,0,0]
-        } else if (props.item === 0) {
-          state.camera.position.z = 0;
-          state.camera.position.y = 1400;
-          state.camera.position.x = 0;
-          state.camera.rotation.x = -Math.PI / 2;
-          state.camera.rotation.y = 0;
-          state.camera.rotation.z = 0;
-          newState = [0, 0, 0];
-          state.scene.children[2].rotation.x = newState[0];
-          state.scene.children[2].rotation.y = newState[1];
-          state.scene.children[2].rotation.z = newState[2];
-          // DataFlag = false;
-          // return
-          // oldState = [-Math.PI/2,0,0]
-        }
-      }
-      buttonFlag = false;
-      console.log(state.camera.rotation);
-      // if (
-      //   (parseInt(cameraPosition.x) !== parseInt(state.camera.position.x) ||
-      //     parseInt(cameraPosition.y) !== parseInt(state.camera.position.y) ||
-      //     parseInt(cameraPosition.z) !== parseInt(state.camera.position.z)) &&
-      //   cameraFlag
-      // ) {
-      //   if (configWs.readyState === 1) {
-      //     configWs.send(
-      //       JSON.stringify({
-      //         camera: state.camera.position,
-      //         cameraRotation: state.camera.rotation,
-      //         id,
-      //       })
-      //     );
-      //   }
-      // }
-
-      // if (ws.readyState === 1) {
-      //   // state.camera.position.x = cameraX
-      //   // state.camera.position.y = cameraY
-      //   // state.camera.position.z = cameraZ
-      //   // state.camera.rotation.x = cameraRotationX
-      //   // state.camera.rotation.y = cameraRotationY
-      //   // state.camera.rotation.z = cameraRotationZ
-      //   // console.log(state.camera.rotation.x)
-      // }
-      // // // console.log(JSON.stringify(oldState) != JSON.stringify(newState),[state.camera.rotation.x,state.camera.rotation.y,state.camera.rotation.z,] ,newState,'rotation')
-      if (
-        ws.readyState === 1 &&
-        JSON.stringify(oldState) != JSON.stringify(newState)
-      ) {
-        // state.camera.rotation.x = newState[0]
-        // state.camera.rotation.y = newState[1]
-        // state.camera.rotation.z = newState[2]
-        // oldState = newState;
-        // state.scene.children[2].rotation.x = newState[0];
-        // state.scene.children[2].rotation.y = newState[1];
-        // state.scene.children[2].rotation.z = newState[2];
-      }
-
-      //线性插值
-
-      interp(wsPointData, bigArrp, 64 + 4, 32 + 4);
-
-      //高斯滤波
-      gaussBlur_1(bigArrp, bigArrg, 128 + 2 * 4, 64 + 2 * 4, props.valueg);
-      //缩放
-
-      if (wsPointData.length > 0) {
-        let i = 0,
-          j = 0;
-        for (let ix = 0; ix < AMOUNTX; ix++) {
-          for (let iy = 0; iy < AMOUNTY; iy++) {
-            const value = bigArrg[j] * 20;
-
-            //柔化处理smooth
-            smoothBig[j] =
-              smoothBig[j] + (value - smoothBig[j] + 0.5) / props.valuel;
-
-            positions[i + 1] = smoothBig[j] * props.value; // y
-            // const rgb = jet1(0, props.valuej, props.valuej1, props.valuej2, props.valuej3, smoothBig[j])
-            const rgb = jet(0, 1000, smoothBig[j]);
-            colors[i] = rgb[0] / 255;
-            colors[i + 1] = rgb[1] / 255;
-            colors[i + 2] = rgb[2] / 255;
-
-            i += 3;
-            j++;
-          }
-        }
-
-        attrib.current.geometry.attributes.position.needsUpdate = true;
-        attrib.current.geometry.attributes.color.needsUpdate = true;
-        // count += 0.1;
-      }
-      cameraPosition = { ...state.camera.position };
-      DataFlag = false;
+    if (props.item === 2) {
+      state.camera.position.z = 2
     } else {
+      state.camera.position.z = 0
     }
-  });
+
+    if (
+      parseInt(cameraPosition.x) !== parseInt(state.camera.position.x) ||
+      parseInt(cameraPosition.y) !== parseInt(state.camera.position.y) ||
+      parseInt(cameraPosition.z) !== parseInt(state.camera.position.z)
+    ) {
+      if (configWs.readyState === 1) {
+        configWs.send(
+          JSON.stringify({
+            camera: state.camera.position,
+            id,
+          }),
+        )
+      }
+    }
+    if (id != nowId) {
+      state.camera.position.x = cameraX
+      state.camera.position.y = cameraY
+      state.camera.position.z = cameraZ
+    }
+
+    //线性插值
+    interp(wsPointData, bigArrp, 64 + 4, 32 + 4)
+
+    //高斯滤波
+    gaussBlur_1(bigArrp, bigArrg, 128 + 2 * 4, 64 + 2 * 4, props.valueg)
+    //缩放
+
+    if (wsPointData.length > 0) {
+      let i = 0,
+        j = 0
+      for (let ix = 0; ix < AMOUNTX; ix++) {
+        for (let iy = 0; iy < AMOUNTY; iy++) {
+          const value = bigArrg[j] * 20
+
+          //柔化处理smooth
+          smoothBig[j] = smoothBig[j] + (value - smoothBig[j] + 0.5) / props.valuel
+
+          positions[i + 1] = smoothBig[j] * props.value // y
+          const rgb = jet(0, props.valuej, smoothBig[j])
+          colors[i] = rgb[0] / 255
+          colors[i + 1] = rgb[1] / 255
+          colors[i + 2] = rgb[2] / 255
+
+          i += 3
+          j++
+        }
+      }
+
+      attrib.current.geometry.attributes.position.needsUpdate = true
+      attrib.current.geometry.attributes.color.needsUpdate = true
+      // count += 0.1;
+    }
+    cameraPosition = {...state.camera.position}
+  })
 
   //线性插值
 
@@ -311,18 +227,17 @@ function Particles(props) {
     <points
       ref={attrib}
       position={[props.postitonX, props.postitonY, props.postitonZ]}
-      // rotation={[props.rotationX, props.rotationY, props.rotationZ]}
-    >
+      rotation={[props.rotationX, props.rotationY, props.rotationZ]}>
       <bufferGeometry attach="geometry">
         <bufferAttribute
-          attachObject={["attributes", "position"]}
+          attachObject={['attributes', 'position']}
           count={positions.length / 3}
           array={positions}
           needsUpdate={true}
           itemSize={3}
         />
         <bufferAttribute
-          attachObject={["attributes", "color"]}
+          attachObject={['attributes', 'color']}
           count={colors.length / 3}
           array={colors}
           needsUpdate={true}
@@ -340,8 +255,258 @@ function Particles(props) {
         alphaTest={0.8}
       />
     </points>
-  );
+  )
 }
+
+// function Particles(props) {
+  
+
+//   const spite = new TextureLoader().load(
+//     require("../../assets/images/circle.png")
+//   );
+//   const attrib = useRef();
+
+//   useEffect(() => {
+//     return () => {
+//       console.log("return");
+//     };
+//   });
+
+//   //变量放到内存，高速调用
+//   const [positions, colors] = useMemo(() => {
+//     let positions = [],
+//       colors = [];
+//     let i = 0,
+//       j = 0;
+//     for (let iy = 0; iy < AMOUNTX; iy++) {
+//       for (let ix = 0; ix < AMOUNTY; ix++) {
+//         positions[i] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2 - 1500 + ix; // x
+//         positions[i + 1] = 0; // y
+//         positions[i + 2] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2 + 500; // z
+
+//         colors[i] = 1;
+//         colors[i + 1] = 0.1;
+//         colors[i + 2] = 0;
+
+//         i += 3;
+//         j++;
+//       }
+//     }
+
+//     return [new Float32Array(positions), new Float32Array(colors)];
+//     // }, [pointCount]);
+//   });
+
+  
+
+
+//   useFrame((state, delta) => {
+//     // state.camera.lookAt(0,0,0)
+
+//     // if (i < 6) {
+//     //   i++
+//     //   wsPointData = null;
+//     //   wsPointData1= null;
+//     //   bigArrg = null;
+//     //   bigArrp = null;
+//     //   smoothBig = null;
+//     // } else
+  
+//     // if (DataFlag) {
+//       // i = 1
+//       // state.gl.clear();
+//       // state.gl.dispose();
+//       // attrib.current.geometry.dispose();
+//       // console.log(state.camera.position,state.camera.rotation)
+//       // oldCameraPosition= JSON.stringify(state.camera.position) 
+//       // oldCameraRotation= JSON.stringify(state.camera.rotation)
+//       // if (buttonFlag) {
+//       //   if (props.item === 2) {
+//       //     // state.camera.position.z = 2;
+//       //     newState = [-Math.PI / 8, 0, 0];
+//       //     // state.camera.rotation.x = -Math.PI / 2;
+//       //     // state.camera.rotation.y = 0;
+//       //     // state.camera.rotation.z = 0;
+//       //     state.scene.children[2].rotation.x = newState[0];
+//       //     state.scene.children[2].rotation.y = newState[1];
+//       //     state.scene.children[2].rotation.z = newState[2];
+//       //     // DataFlag = false;
+//       //     // return
+//       //   } else if (props.item === 1) {
+//       //     // state.camera.position.z = 0;
+//       //     // // if()
+//       //     // state.camera.position.y = 1400;
+//       //     // state.camera.position.x = 0;
+//       //     // state.camera.rotation.x = -Math.PI / 2;
+//       //     // state.camera.rotation.y = 0;
+//       //     // state.camera.rotation.z = 0;
+//       //     newState = [-Math.PI / 2, 0, 0];
+//       //     state.scene.children[2].rotation.x = newState[0];
+//       //     state.scene.children[2].rotation.y = newState[1];
+//       //     state.scene.children[2].rotation.z = newState[2];
+//       //     // DataFlag = false;
+//       //     // return
+//       //     // oldState = [0,0,0]
+//       //   } else if (props.item === 0) {
+//       //     // state.camera.position.z = 0;
+//       //     // state.camera.position.y = 1400;
+//       //     // state.camera.position.x = 0;
+//       //     // state.camera.rotation.x = -Math.PI / 2;
+//       //     // state.camera.rotation.y = 0;
+//       //     // state.camera.rotation.z = 0;
+//       //     newState = [0, 0, 0];
+//       //     state.scene.children[2].rotation.x = newState[0];
+//       //     state.scene.children[2].rotation.y = newState[1];
+//       //     state.scene.children[2].rotation.z = newState[2];
+//       //     // DataFlag = false;
+//       //     // return
+//       //     // oldState = [-Math.PI/2,0,0]
+//       //   }
+//       // }
+//       buttonFlag = false;
+//       // console.log(state.camera.position ,state.camera.rotation)
+//       // console.log(cameraFlag)
+//       // if (
+//       //   // (parseInt(cameraPosition.x) !== parseInt(state.camera.position.x) ||
+//       //   //   parseInt(cameraPosition.y) !== parseInt(state.camera.position.y) ||
+//       //   //   parseInt(cameraPosition.z) !== parseInt(state.camera.position.z)) &&
+//       //   cameraFlag
+//       // ) {
+//       //   if (configWs.readyState === 1) {
+//       //     configWs.send(
+//       //       JSON.stringify({
+//       //         camera: state.camera.position,
+//       //         cameraRotation: state.camera.rotation,
+//       //         id,
+//       //       })
+//       //     );
+//       //   }
+//       // }
+
+//       // if (!cameraFlag && !endFlag
+//       //   // &&( 
+//       //   // comp(JSON.parse(oldCameraPosition).x , JSON.parse(newCameraPosition).x ) || 
+//       //   // comp(JSON.parse(oldCameraPosition).y , JSON.parse(newCameraPosition).y ) || 
+//       //   // comp(JSON.parse(oldCameraPosition).z , JSON.parse(newCameraPosition).z ) || 
+//       //   // comp(JSON.parse(oldCameraRotation).x , JSON.parse(newCameraRotation).x ) || 
+//       //   // comp(JSON.parse(oldCameraRotation).y , JSON.parse(newCameraRotation).y ) || 
+//       //   // comp(JSON.parse(oldCameraRotation).z , JSON.parse(newCameraRotation).z )
+//       // // )
+//       // ) {
+//       //   console.log('changeposition')
+//       //   state.camera.position.x = cameraX;
+//       //   state.camera.position.y = cameraY;
+//       //   state.camera.position.z = cameraZ;
+//       //   state.camera.rotation.x = cameraRotationX;
+//       //   state.camera.rotation.y = cameraRotationY;
+//       //   state.camera.rotation.z = cameraRotationZ;
+//       // }
+
+//       // if (ws.readyState === 1) {
+//       //   // state.camera.position.x = cameraX
+//       //   // state.camera.position.y = cameraY
+//       //   // state.camera.position.z = cameraZ
+//       //   // state.camera.rotation.x = cameraRotationX
+//       //   // state.camera.rotation.y = cameraRotationY
+//       //   // state.camera.rotation.z = cameraRotationZ
+//       //   // console.log(state.camera.rotation.x)
+//       // }
+//       // // // console.log(JSON.stringify(oldState) != JSON.stringify(newState),[state.camera.rotation.x,state.camera.rotation.y,state.camera.rotation.z,] ,newState,'rotation')
+//       if (
+//         ws.readyState === 1 &&
+//         JSON.stringify(oldState) != JSON.stringify(newState)
+//       ) {
+//         // state.camera.rotation.x = newState[0]
+//         // state.camera.rotation.y = newState[1]
+//         // state.camera.rotation.z = newState[2]
+//         // oldState = newState;
+//         // state.scene.children[2].rotation.x = newState[0];
+//         // state.scene.children[2].rotation.y = newState[1];
+//         // state.scene.children[2].rotation.z = newState[2];
+//       }
+
+
+//       // newCameraPosition= JSON.stringify(state.camera.position)
+//       // newCameraRotation= JSON.stringify(state.camera.rotation)
+//       //线性插值
+
+//       interp(wsPointData, bigArrp, 64 + 4, 32 + 4);
+
+//       //高斯滤波
+//       gaussBlur_1(bigArrp, bigArrg, 128 + 2 * 4, 64 + 2 * 4, props.valueg);
+//       //缩放
+
+//       if (wsPointData.length > 0) {
+//         let i = 0,
+//           j = 0;
+//         for (let ix = 0; ix < AMOUNTX; ix++) {
+//           for (let iy = 0; iy < AMOUNTY; iy++) {
+//             const value = bigArrg[j] * 20;
+
+//             //柔化处理smooth
+//             smoothBig[j] =
+//               smoothBig[j] + (value - smoothBig[j] + 0.5) / props.valuel;
+
+//             positions[i + 1] = smoothBig[j] * props.value; // y
+//             // const rgb = jet1(0, props.valuej, props.valuej1, props.valuej2, props.valuej3, smoothBig[j])
+//             const rgb = jet(0, 1000, smoothBig[j]);
+//             colors[i] = rgb[0] / 255;
+//             colors[i + 1] = rgb[1] / 255;
+//             colors[i + 2] = rgb[2] / 255;
+
+//             i += 3;
+//             j++;
+//           }
+//         }
+
+//         attrib.current.geometry.attributes.position.needsUpdate = true;
+//         attrib.current.geometry.attributes.color.needsUpdate = true;
+//         // count += 0.1;
+//       }
+//       // cameraPosition = { ...state.camera.position };
+//       DataFlag = false;
+//     // } else {
+//     // }
+//   });
+
+//   //线性插值
+
+//   return (
+//     // onPointerOver={hover} onPointerOut={unhover}
+//     <points
+//       ref={attrib}
+//       position={[props.postitonX, props.postitonY, props.postitonZ]}
+//       // rotation={[props.rotationX, props.rotationY, props.rotationZ]}
+//     >
+//       <bufferGeometry attach="geometry">
+//         <bufferAttribute
+//           attachObject={["attributes", "position"]}
+//           count={positions.length / 3}
+//           array={positions}
+//           needsUpdate={true}
+//           itemSize={3}
+//         />
+//         <bufferAttribute
+//           attachObject={["attributes", "color"]}
+//           count={colors.length / 3}
+//           array={colors}
+//           needsUpdate={true}
+//           itemSize={3}
+//         />
+//         {/*<bufferAttribute ref={attrib} attachObject={["attributes", "size"]} count={colors.length / 3} array={colors} itemSize={1} />*/}
+//       </bufferGeometry>
+//       <pointsMaterial
+//         map={spite}
+//         attach="material"
+//         vertexColors
+//         size={28}
+//         sizeAttenuation={true}
+//         transparent={true}
+//         alphaTest={0.8}
+//       />
+//     </points>
+//   );
+// }
 
 // 由于canvas不能重新渲染，也不会重新渲染，但是如果直接改变父组件的state，整个组件都会重新渲染体验不好（闪频情况），于是用一个不渲染组件包起来
 class Com extends React.Component {
@@ -361,7 +526,9 @@ class Com extends React.Component {
       nextProps.rotationX != this.props.rotationX ||
       nextProps.rotationY != this.props.rotationY ||
       nextProps.rotationZ != this.props.rotationZ ||
-      nextProps.cameraZ != this.props.cameraZ
+      nextProps.cameraZ != this.props.cameraZ ||
+      nextProps.buttonFlag != this.props.buttonFlag ||
+      nextProps.item != this.props.item
     );
   }
   render() {
@@ -526,18 +693,21 @@ class Anta extends React.Component {
             });
           }
           // console.log(id != objData.id)
-          if (objData.hasOwnProperty("camera") && id != objData.id) {
-            // console.log(22222)
-            cameraX = objData.camera.x;
-            cameraY = objData.camera.y;
-            cameraZ = objData.camera.z;
+          if(!buttonFlag){
+            if (objData.hasOwnProperty("camera") && id != objData.id) {
+              // console.log(22222)
+              cameraX = objData.camera.x;
+              cameraY = objData.camera.y;
+              cameraZ = objData.camera.z;
+            }
+            if (objData.hasOwnProperty("cameraRotation") && id != objData.id) {
+              // console.log(22222)
+              cameraRotationX = objData.cameraRotation.x;
+              cameraRotationY = objData.cameraRotation.y;
+              cameraRotationZ = objData.cameraRotation.z;
+            }
           }
-          if (objData.hasOwnProperty("cameraRotation") && id != objData.id) {
-            // console.log(22222)
-            cameraRotationX = objData.cameraRotation.x;
-            cameraRotationY = objData.cameraRotation.y;
-            cameraRotationZ = objData.cameraRotation.z;
-          }
+          
           if (objData.hasOwnProperty("color")) {
             this.setState({
               valuej1: objData.color,
@@ -591,15 +761,46 @@ class Anta extends React.Component {
       }
       // console.log(objData.hasOwnProperty('item') && id != objData.id, 'open')
       if (objData.hasOwnProperty("item")) {
-        oldState = newState;
-        newState =
-          objData.item == 0
-            ? [0, 0, 0]
-            : objData.item == 1
-            ? [-Math.PI / 2, 0, 0]
-            : objData.item == 2
-            ? [-Math.PI / 8, 0, 0]
-            : oldState;
+        // oldState = newState;
+        // newState =
+        //   objData.item == 0
+        //     ? [0, 0, 0]
+        //     : objData.item == 1
+        //     ? [-Math.PI / 2, 0, 0]
+        //     : objData.item == 2
+        //     ? [-Math.PI / 8, 0, 0]
+        //     : oldState;
+        this.setState({
+          item: objData.item,
+          buttonFlag : true
+        });
+        buttonFlag = true;
+        // console.log(newState)
+      }
+      if (objData.hasOwnProperty("end")) {
+        // oldState = newState;
+        // newState =
+        //   objData.item == 0
+        //     ? [0, 0, 0]
+        //     : objData.item == 1
+        //     ? [-Math.PI / 2, 0, 0]
+        //     : objData.item == 2
+        //     ? [-Math.PI / 8, 0, 0]
+        //     : oldState;
+        endFlag = true
+        // console.log(newState)
+      }
+      if (objData.hasOwnProperty("start")) {
+        // oldState = newState;
+        // newState =
+        //   objData.item == 0
+        //     ? [0, 0, 0]
+        //     : objData.item == 1
+        //     ? [-Math.PI / 2, 0, 0]
+        //     : objData.item == 2
+        //     ? [-Math.PI / 8, 0, 0]
+        //     : oldState;
+        endFlag = false
         // console.log(newState)
       }
       // console.log(objData,objData.hasOwnProperty('camera') && id != objData.id)
@@ -774,7 +975,7 @@ class Anta extends React.Component {
         : 1000,
       valuel: Number(localStorage.getItem("valuel"))
         ? Number(localStorage.getItem("valuel"))
-        : 6, // 数据连贯性
+        : 10, // 数据连贯性
       bedFetchData1: 0,
       bedFetchData2: 0,
       numArr32: [],
@@ -802,7 +1003,7 @@ class Anta extends React.Component {
       recomItem: 0,
       hardness: 50,
       spine: "",
-      buttonFlag : false
+      buttonFlag: false,
     };
     this.cameraX = 0;
     this.cameraY = 1400;
@@ -825,10 +1026,11 @@ class Anta extends React.Component {
     }
   }
 
-  changeButtonFlag(value){
+  changeButtonFlag(value) {
     this.setState({
-      buttonFlag : value
-    })
+      buttonFlag: value,
+    });
+    // console.log('falsechangeButtonFlag',this.state.buttonFlag)
   }
   changeValueg(value) {
     this.setState({ valueg: value });
@@ -855,6 +1057,18 @@ class Anta extends React.Component {
         rotationZ: z,
       });
     }
+  }
+
+  changeEnd(){
+    configWs.send(JSON.stringify({
+      end: 'end',
+    }))
+  }
+
+  changeStart(){
+    configWs.send(JSON.stringify({
+      start: 'start',
+    }))
   }
 
   showRecom() {
@@ -1409,9 +1623,10 @@ class Anta extends React.Component {
     img.style.transition = `all 0.5s`;
     buttonFlag = true;
     this.setState({
-      buttonFlag: true
-    })
+      buttonFlag: true,
+    });
     if (this.state.item <= 1) {
+      changeItem = this.state.item + 1
       this.setState(
         {
           item: this.state.item + 1,
@@ -1449,6 +1664,7 @@ class Anta extends React.Component {
         }
       );
     } else {
+      changeItem = 0
       this.setState(
         {
           item: 0,
@@ -1944,6 +2160,8 @@ class Anta extends React.Component {
               rotationX={this.state.rotationX}
               cameraZ={this.state.cameraZ}
               cameraFlag={this.state.cameraFlag}
+              buttonFlag={this.state.buttonFlag}
+              item={this.state.item}
             >
               {/* <video src={video}></video> */}
               <Canvas
@@ -1957,7 +2175,7 @@ class Anta extends React.Component {
                   zoom: 1,
                   fov: 65,
                   position: [0, this.state.cameraY, this.state.cameraZ],
-                  rotation: [-Math.PI/2, 0, 0],
+                  rotation: [-Math.PI / 2, 0, 0],
                   near: 1,
                   far: 10000,
                 }}
@@ -1969,13 +2187,16 @@ class Anta extends React.Component {
                 <Controls
                   item={this.state.item}
                   buttonFlag={this.state.buttonFlag}
-                  changeButtonFlag = {this.changeButtonFlag.bind(this)}
+                  changeButtonFlag={this.changeButtonFlag.bind(this)}
                   // cameraFlag={this.state.cameraFlag}
-                  // changeCameraFlag={this.changeCameraFlag.bind(this)}
+                  changeCameraFlag={this.changeCameraFlag.bind(this)}
+                  changeEnd={this.changeEnd.bind(this)}
+                  changeStart={this.changeStart.bind(this)}
                 />
                 {/* <OrthographicCamera left={-window.innerWidth*0.65/2} right={window.innerWidth*0.65/2} top={window.innerHeight/2} bottom={-window.innerHeight/2} near={1} far={10000} 
                  /> */}
                 <Particles
+                  item={this.state.item}
                   cameraFlag={this.state.cameraFlag}
                   changeRotation={this.changeRotation.bind(this)}
                   fliter={this.state.fliter}
@@ -1992,7 +2213,7 @@ class Anta extends React.Component {
                   valueg={this.state.valueg1}
                   value={this.state.value1}
                   valuel={this.state.valuel}
-                  item={this.state.item}
+                  // item={this.state.item}
                   lfc={this.lfc}
                   balance={this.balance}
                   footForm={this.footForm}

@@ -22,18 +22,18 @@ const Controls = (props) => {
 
     // controls.current.update(); 
    
-    // if (props.buttonFlag) {
-    //   console.log('change')
-    //   // controls.current.reset();
-    //   if (props.item === 2) {
-    //     controls.current.reset();
-    //   } else if (props.item === 1) {
-    //     controls.current.reset();
-    //   } else if (props.item === 0) {
-    //     controls.current.reset();
-    //   }
-    //   props.changeButtonFlag(false);
-    // }
+    if (props.buttonFlag) {
+      console.log('change')
+      // controls.current.reset();
+      if (props.item === 2) {
+        controls.current.reset();
+      } else if (props.item === 1) {
+        controls.current.reset();
+      } else if (props.item === 0) {
+        controls.current.reset();
+      }
+      props.changeButtonFlag(false);
+    }
    
     // console.log(controls.current.start)
   });
