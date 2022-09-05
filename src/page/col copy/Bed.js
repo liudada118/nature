@@ -107,7 +107,7 @@ function Particles(props) {
     LSmooth = 0
   useFrame(state => {
     // state.camera.lookAt(0,0,0)
-
+console.log(1111111)
     if (props.item === 2) {
       state.camera.position.z = 2
     } else {

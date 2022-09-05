@@ -20,22 +20,22 @@ const Controls = (props) => {
   useFrame(() => {
     // update the view as the vis is interacted with
 
-    // controls.current.update(); 
+  controls.current.update();
+
+  
+    if (props.buttonFlag) {
+      console.log('change')
+      if (props.item === 2) {
+        controls.current.reset();
+      } else if (props.item === 1) {
+        controls.current.reset();
+      } else if (props.item === 0) {
+        controls.current.reset();
+      }
+      props.changeButtonFlag(false);
+    }
    
-    // if (props.buttonFlag) {
-    //   console.log('change')
-    //   // controls.current.reset();
-    //   if (props.item === 2) {
-    //     controls.current.reset();
-    //   } else if (props.item === 1) {
-    //     controls.current.reset();
-    //   } else if (props.item === 0) {
-    //     controls.current.reset();
-    //   }
-    //   props.changeButtonFlag(false);
-    // }
-   
-    // console.log(controls.current.start)
+  
   });
   useEffect(() => {
     controls.current.start = function () {
@@ -47,13 +47,13 @@ const Controls = (props) => {
     });
     controls.current.addEventListener("end", function () {
    
-      // props.changeCameraFlag(false)
-      // props.changeEnd()
+      props.changeCameraFlag(false)
+      props.changeEnd()
     });
     controls.current.addEventListener("start", function () {
       
-      // props.changeCameraFlag(true)
-      // props.changeStart()
+      props.changeCameraFlag(true)
+      props.changeStart()
     });
   });
   function start() {
@@ -74,7 +74,7 @@ const Controls = (props) => {
         
       }}
       mouseButtons={{
-        LEFT: THREE.MOUSE.PAN, // make pan the default instead of rotate
+        // LEFT: THREE.MOUSE.PAN, // make pan the default instead of rotate
         MIDDLE: THREE.MOUSE.ZOOM,
         RIGHT: THREE.MOUSE.ROTATE,
       }}
