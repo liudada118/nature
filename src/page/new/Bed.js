@@ -20,7 +20,16 @@ import { interp, gaussBlur_1, jet, addSide, stack } from "../../assets/js/util";
 import feature from "../../assets/images/feature.png";
 import bed1 from "../../assets/images/bed1.png";
 import down from "../../assets/images/down.png";
-import { Select, Modal, Input, Button, Slider } from "antd";
+import {
+  Select,
+  Modal,
+  Input,
+  Button,
+  Slider,
+  message,
+  Radio,
+  Spin,
+} from "antd";
 import axios from "axios";
 import { jet1 } from "../../assets/js/util";
 import view from "../../assets/image1/view.png";
@@ -344,7 +353,7 @@ function Particles(props) {
 
             positions[i + 1] = smoothBig[j] * props.value; // y
             // const rgb = jet1(0, props.valuej, props.valuej1, props.valuej2, props.valuej3, smoothBig[j])
-            const rgb = jet(0, props.valuej, smoothBig[j]);
+            const rgb = jet(0, props.valuej1, smoothBig[j]);
             colors[i] = rgb[0] / 255;
             colors[i + 1] = rgb[1] / 255;
             colors[i + 2] = rgb[2] / 255;
@@ -469,7 +478,7 @@ class Anta extends React.Component {
       const allPress = wsPointData1.reduce((a, b) => a + b, 0);
       const allNum = wsPointData1.filter((a) => a > 0).length;
       this.setState({
-        press: allPress / allNum,
+        press: allNum > 0 ? allPress / allNum : 0,
       });
       // let a = []
       //   for (let i = 0; i < 32; i++) {
@@ -788,34 +797,47 @@ class Anta extends React.Component {
   hiddenRealReport() {
     const page = document.querySelector(".reportPage");
     page.style.display = "none";
+    this.setState({
+      name: "",
+      phone: "",
+      sex: 1,
+    });
   }
 
   showReport() {
-    const page1 = document.querySelector(".reportInput");
-    page1.style.transform = `translateY(40px)`;
-    page1.style.opacity = 0;
-    page1.style.transition = `all 0.4s`;
-    setTimeout(() => {
-      page1.style.visibility = "hidden";
-    }, 380);
+    if (
+      this.state.name == "" ||
+      this.state.sex == "" ||
+      this.state.phone == ""
+    ) {
+      message.error("请输入完整信息");
+    } else {
+      const page1 = document.querySelector(".reportInput");
+      page1.style.transform = `translateY(40px)`;
+      page1.style.opacity = 0;
+      page1.style.transition = `all 0.4s`;
+      setTimeout(() => {
+        page1.style.visibility = "hidden";
+      }, 380);
 
-    const breath = this.state.breatheData;
-    const move = this.state.moveData;
-    const press = this.state.press;
-    this.setState({
-      nowBreath: breath,
-      nowMove: move,
-      nowPress: press,
-    });
-    const page = document.querySelector(".reportPage");
-    // page.style.transform = `translateY(40px)`
-    // page.style.opacity = 0
-    // page.style.transition = `all 0.4s`
-    // setTimeout(() => {
-    //   page.style.visibility = 'hidden'
-    // }, 380)
+      const breath = this.state.breatheData;
+      const move = this.state.moveData;
+      const press = this.state.press;
+      this.setState({
+        nowBreath: breath,
+        nowMove: move,
+        nowPress: press,
+      });
+      const page = document.querySelector(".reportPage");
+      // page.style.transform = `translateY(40px)`
+      // page.style.opacity = 0
+      // page.style.transition = `all 0.4s`
+      // setTimeout(() => {
+      //   page.style.visibility = 'hidden'
+      // }, 380)
 
-    page.style.display = "flex";
+      page.style.display = "flex";
+    }
   }
 
   handleOk() {
@@ -832,9 +854,10 @@ class Anta extends React.Component {
     this.drop = React.createRef();
     this.num = React.createRef();
     this.state = {
-      filter: Number(localStorage.getItem("filter"))
-        ? Number(localStorage.getItem("filter"))
-        : 28, //过滤值
+      filter: 17,
+      // Number(localStorage.getItem("filter"))
+      //   ? Number(localStorage.getItem("filter"))
+      //   : 17, //过滤值
       windowWidth: window.innerWidth,
       rotationX: 0,
       rotationY: 0,
@@ -843,30 +866,35 @@ class Anta extends React.Component {
       postitonY: window.innerWidth > 768 ? -400 : -400, //-250,
       postitonZ: window.innerWidth > 768 ? 100 : 100, //-450,
       time: 0,
-      valuej1: Number(localStorage.getItem("valuej1"))
-        ? Number(localStorage.getItem("valuej1"))
-        : 1010, // 饱和度
+      valuej1: 1200,
+      loading: false,
+      // Number(localStorage.getItem("valuej1"))
+      //   ? Number(localStorage.getItem("valuej1"))
+      //   : 1200, // 饱和度
       valuej2: Number(localStorage.getItem("valuej2"))
         ? Number(localStorage.getItem("valuej2"))
-        : 1010, // 饱和度
+        : 1200, // 饱和度
       valuej3: Number(localStorage.getItem("valuej3"))
         ? Number(localStorage.getItem("valuej3"))
-        : 1010, // 饱和度
+        : 1200, // 饱和度
       valuej: Number(localStorage.getItem("valuej"))
         ? Number(localStorage.getItem("valuej"))
-        : 1010, // 饱和度
-      valueg1: Number(localStorage.getItem("valueg1"))
-        ? Number(localStorage.getItem("valueg1"))
-        : 3, // 高斯
-      value1: Number(localStorage.getItem("value1"))
-        ? Number(localStorage.getItem("value1"))
-        : 0.23, // z
+        : 1200, // 饱和度
+      valueg1: 3,
+      //  Number(localStorage.getItem("valueg1"))
+      //   ? Number(localStorage.getItem("valueg1"))
+      //   : 3, // 高斯
+      value1: 0.23,
+      // Number(localStorage.getItem("value1"))
+      //   ? Number(localStorage.getItem("value1"))
+      //   : 0.23, // z
       valuef1: Number(localStorage.getItem("valuef1"))
         ? Number(localStorage.getItem("valuef1"))
         : 1000,
-      valuel: Number(localStorage.getItem("valuel"))
-        ? Number(localStorage.getItem("valuel"))
-        : 6, // 数据连贯性
+      valuel: 6,
+      // Number(localStorage.getItem("valuel"))
+      //   ? Number(localStorage.getItem("valuel"))
+      //   : 6, // 数据连贯性
       bedFetchData1: 0,
       bedFetchData2: 0,
       numArr32: [],
@@ -889,8 +917,8 @@ class Anta extends React.Component {
       press: 0,
       phone: "",
       name: "",
-      sex: "",
-      recomBed: {},
+      sex: 1,
+      recomBed: [],
       recomItem: 0,
       hardness: 50,
       spine: "",
@@ -951,19 +979,23 @@ class Anta extends React.Component {
   }
 
   changeEnd() {
-    configWs.send(
-      JSON.stringify({
-        end: "end",
-      })
-    );
+    if (configWs.readyState === 1) {
+      configWs.send(
+        JSON.stringify({
+          end: "end",
+        })
+      );
+    }
   }
 
   changeStart() {
-    configWs.send(
-      JSON.stringify({
-        start: "start",
-      })
-    );
+    if (configWs.readyState === 1) {
+      configWs.send(
+        JSON.stringify({
+          start: "start",
+        })
+      );
+    }
   }
 
   showRecom() {
@@ -973,532 +1005,7 @@ class Anta extends React.Component {
     page.style.opacity = 1;
     page.style.transition = `all 0.4s`;
     // console.log(page.style)
-
-    if (this.state.bed === "新幻境系列") {
-      if (this.state.recomItem == 0) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 1) {
-        this.setState({
-          recomBed: {
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            正棕Z5系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 2) {
-        this.setState({
-          recomBed: {
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            正棕Z5系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-          },
-        });
-      }
-    } else if (this.state.bed === "新梦境系列") {
-      if (this.state.recomItem == 0) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 1) {
-        this.setState({
-          recomBed: {
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            正棕Z5系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 2) {
-        this.setState({
-          recomBed: {
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            正棕Z5系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-          },
-        });
-      }
-    } else if (this.state.bed === "正棕Z5系列") {
-      if (this.state.recomItem == 0) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 1) {
-        this.setState({
-          recomBed: {
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            正棕Z5系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 2) {
-        this.setState({
-          recomBed: {
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      }
-    } else if (this.state.bed === "Z6心境系列") {
-      if (this.state.recomItem == 0) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 1) {
-        this.setState({
-          recomBed: {
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 2) {
-        this.setState({
-          recomBed: {
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      }
-    } else if (this.state.bed === "净界系列") {
-      if (this.state.recomItem == 0) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 1) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 2) {
-        this.setState({
-          recomBed: {
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      }
-    } else if (this.state.bed === "强护脊系列") {
-      if (this.state.recomItem == 0) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 1) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 2) {
-        this.setState({
-          recomBed: {
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      }
-    } else if (this.state.bed === "意境系列") {
-      if (this.state.recomItem == 0) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 1) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 2) {
-        this.setState({
-          recomBed: {
-            意境系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-
-            净界系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            强护脊系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            Z6心境系列: {
-              img: "./img/bed1.png",
-              num: 3,
-            },
-          },
-        });
-      }
-    } else if (
-      this.state.bed === "X7臻耀系列" ||
-      this.state.bed === "S冠军系列" ||
-      this.state.bed === "S3系列"
-    ) {
-      if (this.state.recomItem == 0) {
-        this.setState({
-          recomBed: {
-            X7臻耀系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            S冠军系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            S3系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 1) {
-        this.setState({
-          recomBed: {
-            S冠军系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-            X7臻耀系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            S3系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-          },
-        });
-      } else if (this.state.recomItem == 2) {
-        this.setState({
-          recomBed: {
-            S3系列: {
-              img: "./img/bed1.png",
-              num: 5,
-            },
-
-            X7臻耀系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-            S冠军系列: {
-              img: "./img/bed1.png",
-              num: 4,
-            },
-          },
-        });
-      }
-    } else {
-      this.setState({
-        recomBed: {},
-      });
-    }
+    this.changeBedType();
   }
 
   hiddenRecom() {
@@ -1640,11 +1147,620 @@ class Anta extends React.Component {
   }
 
   getBlobPng() {
+    // this.setState({
+    //   loading: true,
+    // });
+    const that = this;
     console.log("png");
     const node = document.getElementById("node");
     domtoimage.toBlob(node).then((blob) => {
       // 调用file-save方法 直接保存图片
-      saveAs(blob, "自动保存.png");
+      saveAs(blob, `${this.state.name}.png`);
+      // that.setState({
+      //   loading: false,
+      // });
+    });
+  }
+
+  changeBed(value) {
+    this.select.current.blur();
+    this.setState({
+      bed: value,
+    });
+    axios
+      .get(
+        `http://192.168.31.40:8080/setBedName?bedName=${bedArr.indexOf(value)}`
+      )
+      .then((res) => {
+        console.log(res);
+      });
+    if (configWs.readyState === 1) {
+      configWs.send(
+        JSON.stringify({
+          bed: value,
+        })
+      );
+    }
+
+    this.changeBedType();
+  }
+
+  changeBedType() {
+    const value = this.state.bed;
+    if (value === "新幻境系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: [
+            { bedName: "意境系列", img: "./img/yj.png", num: 5 },
+            { bedName: "强护脊系列", img: "./img/qhj.png", num: 4 },
+            { bedName: "净界系列", img: "./img/jj.png", num: 4 },
+            { bedName: "Z6心境系列", img: "./img/Z6.png", num: 3 },
+          ],
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: [
+            { bedName: "强护脊系列", img: "./img/qhj.png", num: 5 },
+            { bedName: "净界系列", img: "./img/jj.png", num: 4 },
+            { bedName: "Z6心境系列", img: "./img/Z6.png", num: 4 },
+            { bedName: "正棕Z5系列", img: "./img/Z5.png", num: 3 },
+          ],
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: [
+            { bedName: "净界系列", img: "./img/jj.png", num: 5 },
+            { bedName: "Z6心境系列", img: "./img/Z6.png", num: 4 },
+            { bedName: "正棕Z5系列", img: "./img/Z5.png", num: 3 },
+            { bedName: "强护脊系列", img: "./img/qhj.png", num: 4 },
+          ],
+        });
+      }
+    } else if (value === "新梦境系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 5,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z5.png",
+              bedName: "正棕Z5系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 5,
+            },
+
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z5.png",
+              bedName: "正棕Z5系列",
+              num: 3,
+            },
+            {
+              img: "./img/xmj.png",
+              bedName: "新梦境系列",
+              num: 4,
+            },
+          ],
+        });
+      }
+    } else if (value === "正棕Z5系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 5,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z5.png",
+              bedName: "正棕Z5系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 5,
+            },
+
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 4,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      }
+    } else if (value === "Z6心境系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 5,
+            },
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 5,
+            },
+
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 4,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      }
+    } else if (value === "净界系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 5,
+            },
+
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 4,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      }
+    } else if (value === "强护脊系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 5,
+            },
+
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      }
+    } else if (value === "意境系列") {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 4,
+            },
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 3,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/yj.png",
+              bedName: "意境系列",
+              num: 5,
+            },
+
+            {
+              img: "./img/jj.png",
+              bedName: "净界系列",
+              num: 4,
+            },
+            {
+              img: "./img/qhj.png",
+              bedName: "强护脊系列",
+              num: 4,
+            },
+            {
+              img: "./img/Z6.png",
+              bedName: "Z6心境系列",
+              num: 3,
+            },
+          ],
+        });
+      }
+    } else if (
+      value === "X7臻耀系列" ||
+      value === "S冠军系列" ||
+      value === "S3系列"
+    ) {
+      if (this.state.recomItem == 0) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/X7.png",
+              bedName: "X7臻耀系列",
+              num: 5,
+            },
+            {
+              img: "./img/gj.png",
+              bedName: "S冠军系列",
+              num: 4,
+            },
+            {
+              img: "./img/S3.png",
+              bedName: "S3系列",
+              num: 4,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 1) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/gj.png",
+              bedName: "S冠军系列",
+              num: 5,
+            },
+            {
+              img: "./img/X7.png",
+              bedName: "X7臻耀系列",
+              num: 4,
+            },
+            {
+              img: "./img/S3.png",
+              bedName: "S3系列",
+              num: 4,
+            },
+          ],
+        });
+      } else if (this.state.recomItem == 2) {
+        this.setState({
+          recomBed: [
+            {
+              img: "./img/S3.png",
+              bedName: "S3系列",
+              num: 5,
+            },
+
+            {
+              img: "./img/X7.png",
+              bedName: "X7臻耀系列",
+              num: 4,
+            },
+            {
+              img: "./img/gj.png",
+              bedName: "S冠军系列",
+              num: 4,
+            },
+          ],
+        });
+      }
+    } else {
+      this.setState({
+        recomBed: [],
+      });
+    }
+  }
+
+  onSexChange(e) {
+    this.setState({
+      sex: e.target.value,
     });
   }
 
@@ -1745,26 +1861,7 @@ class Anta extends React.Component {
               listHeight={400}
               style={{ minWidth: "10%" }}
               onSelect={(value) => {
-                this.select.current.blur();
-                this.setState({
-                  bed: value,
-                });
-                axios
-                  .get(
-                    `http://192.168.31.40:8080/setBedName?bedName=${bedArr.indexOf(
-                      value
-                    )}`
-                  )
-                  .then((res) => {
-                    console.log(res);
-                  });
-                if (configWs.readyState === 1) {
-                  configWs.send(
-                    JSON.stringify({
-                      bed: value,
-                    })
-                  );
-                }
+                this.changeBed(value);
               }}
               dropdownMatchSelectWidth={300}
             >
@@ -1844,13 +1941,15 @@ class Anta extends React.Component {
                 </div>
                 <div className="degreeProgress">
                   <div className="progressStrip"></div>
-                  <div
-                    className="progressRound"
-                    style={{
-                      position: "absolute",
-                      left: `${this.state.hardness}%`,
-                    }}
-                  ></div>
+                  {this.state.bed ? (
+                    <div
+                      className="progressRound"
+                      style={{
+                        position: "absolute",
+                        left: `${this.state.hardness}%`,
+                      }}
+                    ></div>
+                  ) : null}
                 </div>
                 <div className="degreeInfo">
                   <div>偏软</div>
@@ -1900,7 +1999,7 @@ class Anta extends React.Component {
               </div>
               {/* </Link> */}
             </div>
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 width: "65%",
@@ -1932,7 +2031,7 @@ class Anta extends React.Component {
               <div className="color">
                 <div>坐垫颜色饱和度</div>
                 <div style={{ display: "flex" }}>
-                  {/* <Input
+                  <Input
                       value={this.state.valuej}
                       onChange={e => {
                         const value = e.target.value
@@ -1963,14 +2062,14 @@ class Anta extends React.Component {
                         localStorage.setItem('valuej3', value)
                         this.setState({valuej3: e.target.value})
                       }}
-                    /> */}
+                    />
 
                   <Slider
-                    min={0.1}
-                    max={8}
+                    min={100}
+                    max={1200}
                     onChange={(value) => {
-                      localStorage.setItem("valuej", value);
-                      this.setState({ valuej: value });
+                      localStorage.setItem("valuej1", value);
+                      this.setState({ valuej1: value });
                       if (configWs.readyState === 1) {
                         configWs.send(
                           JSON.stringify({
@@ -1979,9 +2078,9 @@ class Anta extends React.Component {
                         );
                       }
                     }}
-                    value={this.state.valueg1}
-                    step={0.1}
-                    // value={}
+                    value={this.state.valuej1}
+                    step={10}
+                    
                     style={{ flex: 1 }}
                   />
                 </div>
@@ -2057,7 +2156,7 @@ class Anta extends React.Component {
                   style={{ flex: 1 }}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div
@@ -2168,8 +2267,9 @@ class Anta extends React.Component {
             >
               <div className="inputItem">请输入信息</div>
               <div className="inputItem">
-                <div className="itemName">姓名</div>{" "}
+                <div className="itemName">姓名</div>
                 <Input
+                  value={this.state.name}
                   onChange={(e) => {
                     this.setState({
                       name: e.target.value,
@@ -2178,19 +2278,20 @@ class Anta extends React.Component {
                 />
               </div>
               <div className="inputItem">
-                <div className="itemName">性别</div>{" "}
-                <Input
-                  onChange={(e) => {
-                    this.setState({
-                      sex: e.target.value,
-                    });
-                  }}
-                />
+                <div className="itemName">性别</div>
+                <Radio.Group onChange={this.onSexChange} value={this.state.sex}>
+                  <Radio value={1}>男</Radio>
+                  <Radio value={2}>女</Radio>
+                </Radio.Group>
               </div>
               <div className="inputItem">
-                <div className="itemName">联系方式</div>{" "}
+                <div className="itemName">联系方式</div>
                 <Input
+                  value={this.state.phone}
+                  // type={'number'}
                   onChange={(e) => {
+                    // const value=e.target.value
+
                     this.setState({
                       phone: e.target.value,
                     });
@@ -2219,7 +2320,7 @@ class Anta extends React.Component {
             {/* </div> */}
 
             <div className="recomContent">
-              {Object.keys(this.state.recomBed).map((item, index) => {
+              {this.state.recomBed.map((item, index) => {
                 // console.log(this.state.recomBed[item]?.num)
                 return (
                   <div className="recomItem">
@@ -2234,25 +2335,22 @@ class Anta extends React.Component {
                       <div
                         className="recomImg"
                         style={{
-                          backgroundImage: `url(${this.state.recomBed[item].img})`,
+                          backgroundImage: `url(${item.img})`,
                           width: "100%",
                         }}
                       >
                         {/* <img src={bed1} alt="" /> */}
                       </div>
-                      <div className="recomName">{item}</div>
+                      <div className="recomName">{item.bedName}</div>
                     </div>
                     <div className="recomed">
-                      推荐指数:
+                      推荐指数:&nbsp;
                       {new Array(5).fill(0).map((items, indexs) => {
                         return (
                           <img
                             key={indexs}
                             style={{
-                              display:
-                                indexs < this.state.recomBed[item].num
-                                  ? "unset"
-                                  : "none",
+                              display: indexs < item.num ? "unset" : "none",
                             }}
                             src={star}
                             alt=""
@@ -2264,7 +2362,7 @@ class Anta extends React.Component {
                 );
               })}
 
-              {Object.keys(this.state.recomBed).length == 0 ? (
+              {this.state.recomBed.length == 0 ? (
                 <div style={{ fontSize: "2rem" }}>
                   Please select the current mattress style
                 </div>
@@ -2369,7 +2467,22 @@ class Anta extends React.Component {
             </div>
           </div>
         </div>
-
+        {/* {this.state.loading ? (
+          <div
+            style={{
+              display: "flex",
+              zIndex: 301,
+              position: "fixed",
+              width: "100%",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {" "}
+            <Spin />
+          </div>
+        ) : null} */}
         <div
           className="reportPage"
           onClick={() => {
@@ -2394,7 +2507,7 @@ class Anta extends React.Component {
               </div>
               <div className="personInfo">
                 <p>姓名: {this.state.name}</p>
-                <p>性别: {this.state.sex}</p>
+                <p>性别: {this.state.sex == 1 ? "男" : "女"}</p>
                 <p>联系方式: {this.state.phone}</p>
               </div>
             </div>
@@ -2428,17 +2541,24 @@ class Anta extends React.Component {
               <div className="reportRecomBed">
                 <div className="reportRecomInfo">
                   <div className="reportRecomImg">
-                    <img src={bed1} alt="" />
+                    <img src={this.state.recomBed[0]?.img} alt="" />
                   </div>
-                  <div className="reportRecomName">意境床垫</div>
+                  <div className="reportRecomName">
+                    {this.state.recomBed[0]?.bedName}
+                  </div>
                 </div>
                 <div className="reportRecomed">
-                  推荐指数:
+                  推荐指数:&nbsp;
                   {new Array(5).fill(0).map((item, index) => {
                     return (
                       <img
                         key={index}
-                        style={{ display: index < 4 ? "unset" : "none" }}
+                        style={{
+                          display:
+                            index < this.state.recomBed[0]?.num
+                              ? "unset"
+                              : "none",
+                        }}
                         src={star}
                         alt=""
                       />

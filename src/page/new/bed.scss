@@ -334,10 +334,12 @@
     justify-content: center;
     position: relative;
     color: #fff;
+    align-items: end;
     
 }
 .reportRecomImg{
     margin-right: 2rem;
+    width: 100%;
     
 }
 .reportRecom img{
@@ -373,7 +375,7 @@
 .reportRecomBed{
     width: 70%;
     position: absolute;
-    height: 100%;
+    height: 90%;
     display: flex;
     align-items: baseline;
     justify-content: center;
@@ -385,7 +387,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-
+    width: 100%
 }
 
 
