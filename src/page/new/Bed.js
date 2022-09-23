@@ -16,7 +16,7 @@ import sidevery from "../../assets/images/sidevery.png";
 import nature from "../../assets/images/nat.png";
 import side from "../../assets/images/sidenormal.png";
 import { interp, gaussBlur_1, jet, addSide, stack } from "../../assets/js/util";
-
+import QRCode from "qrcode.react";
 import feature from "../../assets/images/feature.png";
 import bed1 from "../../assets/images/bed1.png";
 import down from "../../assets/images/down.png";
@@ -34,8 +34,8 @@ import axios from "axios";
 import { jet1 } from "../../assets/js/util";
 import view from "../../assets/image1/view.png";
 import item from "../../assets/image1/item.png";
-import sleep1 from "../../assets/image1/sleep1.png";
-import sleep2 from "../../assets/image1/sleep2.png";
+import sleep1 from "../../assets/image1/sleep12.png";
+import sleep2 from "../../assets/image1/sleep13.png";
 import sleep3 from "../../assets/image1/sleep3.png";
 import report from "../../assets/image1/report.png";
 import recommend from "../../assets/image1/recommend.png";
@@ -67,7 +67,7 @@ let wsPointData1 = new Array(2048).fill(0);
 let bigArrg = new Array(AMOUNTX * AMOUNTY).fill(1);
 let bigArrp = new Array(AMOUNTX * AMOUNTY).fill(1);
 let smoothBig = new Array(AMOUNTX * AMOUNTY).fill(1);
-
+let oldPositionY = 1400
 let ws, configWs;
 let pageClose = false;
 
@@ -134,7 +134,7 @@ let cameraX = 0;
 let cameraRotationX = 0;
 let cameraRotationY = 0;
 let cameraRotationZ = 0;
-let cameraY = 1000;
+let cameraY = 1400;
 let cameraZ = 0;
 let rotation = [0, 0, 0];
 let cameraFlag = false;
@@ -209,7 +209,7 @@ function Particles(props) {
 
     // if (DataFlag) {
     // i = 1
-    // console.log(state)
+
     // state.gl.clear();
     // state.gl.dispose();
     // attrib.current.geometry.dispose();
@@ -260,14 +260,25 @@ function Particles(props) {
       }
     }
     buttonFlag = false;
-    // console.log(state.camera.position ,state.camera.rotation)
-    // console.log(cameraFlag)
+    // console.log( state.camera.position.y,cameraY , comp(state.camera.position.y,cameraY))
+    // if (
+    //   !comp(state.camera.position.y,cameraY)
+    // ) {
+    //   console.log('yes')
+    //   cameraY = state.camera.position.y
+    //   configWs.send(
+    //     JSON.stringify({
+    //       camera: state.camera.position,
+    //       cameraRotation: state.camera.rotation,
+    //       id,
+    //     })
+    //   );
+    // }
+    
     if (
-      // (parseInt(cameraPosition.x) !== parseInt(state.camera.position.x) ||
-      //   parseInt(cameraPosition.y) !== parseInt(state.camera.position.y) ||
-      //   parseInt(cameraPosition.z) !== parseInt(state.camera.position.z)) &&
       cameraFlag
     ) {
+      console.log('change')
       if (configWs.readyState === 1) {
         configWs.send(
           JSON.stringify({
@@ -277,8 +288,22 @@ function Particles(props) {
           })
         );
       }
-    }
+    }else if (
+        !comp(state.camera.position.y,oldPositionY)
+      ) {
+      
+        cameraY = state.camera.position.y
+        configWs.send(
+          JSON.stringify({
+            camera: state.camera.position,
+            cameraRotation: state.camera.rotation,
+            id,
+          })
+        );
+      }
 
+    if (cameraFlag && endFlag) {
+    }
     if (
       !cameraFlag &&
       !endFlag
@@ -291,19 +316,12 @@ function Particles(props) {
       // comp(JSON.parse(oldCameraRotation).z , JSON.parse(newCameraRotation).z )
       // )
     ) {
-      // console.log("change");
       state.camera.position.x = cameraX;
       state.camera.position.y = cameraY;
       state.camera.position.z = cameraZ;
       state.camera.rotation.x = cameraRotationX;
       state.camera.rotation.y = cameraRotationY;
       state.camera.rotation.z = cameraRotationZ;
-      console.log(
-        cameraRotationX,
-        cameraRotationY,
-        cameraRotationZ,
-        state.camera.rotation
-      );
     }
 
     // if (ws.readyState === 1) {
@@ -313,9 +331,9 @@ function Particles(props) {
     //   // state.camera.rotation.x = cameraRotationX
     //   // state.camera.rotation.y = cameraRotationY
     //   // state.camera.rotation.z = cameraRotationZ
-    //   // console.log(state.camera.rotation.x)
+
     // }
-    // // // console.log(JSON.stringify(oldState) != JSON.stringify(newState),[state.camera.rotation.x,state.camera.rotation.y,state.camera.rotation.z,] ,newState,'rotation')
+
     if (
       ws.readyState === 1 &&
       JSON.stringify(oldState) != JSON.stringify(newState)
@@ -372,6 +390,7 @@ function Particles(props) {
     DataFlag = false;
     // } else {
     // }
+    oldPositionY = state.camera.position.y
   });
 
   //线性插值
@@ -501,7 +520,6 @@ class Anta extends React.Component {
        * 计算压力最大面积，最大值，平均值
        * */
     } else {
-      // console.log(jsonObject)
       progress = progress + (jsonObject.hardness_degree - progress) / 10;
 
       this.setState({
@@ -558,6 +576,9 @@ class Anta extends React.Component {
     //   color: '#2ac1e9',
     // })
 
+    window.addEventListener("mouseout", () => {});
+    document.addEventListener("DOMMouseScroll", () => {}, false);
+
     this.breathe = new stack(20);
     this.move = new stack(20);
 
@@ -597,14 +618,13 @@ class Anta extends React.Component {
               valueg1: objData.gaussian,
             });
           }
-          // console.log(objData.hasOwnProperty('item') && id != objData.id, 'open')
+
           if (objData.hasOwnProperty("item")) {
             this.setState({
               item: objData.item,
               buttonFlag: true,
             });
             buttonFlag = true;
-            // console.log(newState)
           }
           if (objData.hasOwnProperty("end")) {
             endFlag = true;
@@ -627,7 +647,6 @@ class Anta extends React.Component {
             });
           }
           if (objData.hasOwnProperty("cameraRotation")) {
-            // console.log(22222)
             cameraRotationX = objData.cameraRotation._x;
             cameraRotationY = objData.cameraRotation._y;
             cameraRotationZ = objData.cameraRotation._z;
@@ -683,14 +702,13 @@ class Anta extends React.Component {
           valueg1: objData.gaussian,
         });
       }
-      // console.log(objData.hasOwnProperty('item') && id != objData.id, 'open')
+
       if (objData.hasOwnProperty("item")) {
         this.setState({
           item: objData.item,
           buttonFlag: true,
         });
         buttonFlag = true;
-        // console.log(newState)
       }
       if (objData.hasOwnProperty("end")) {
         endFlag = true;
@@ -700,7 +718,6 @@ class Anta extends React.Component {
       }
 
       if (objData.hasOwnProperty("camera")) {
-        // console.log(objData.camera.x,objData.camera.y,objData.camera.z)
         cameraX = objData.camera.x;
         cameraY = objData.camera.y;
         cameraZ = objData.camera.z;
@@ -714,7 +731,6 @@ class Anta extends React.Component {
         });
       }
       if (objData.hasOwnProperty("cameraRotation")) {
-        // console.log(22222)
         cameraRotationX = objData.cameraRotation._x;
         cameraRotationY = objData.cameraRotation._y;
         cameraRotationZ = objData.cameraRotation._z;
@@ -776,7 +792,6 @@ class Anta extends React.Component {
   showModal() {
     // this.setIsModalVisible(true)
 
-    // console.log(111)
     const page = document.querySelector(".reportInput");
     page.style.visibility = "unset";
     page.style.transform = `translateY(0)`;
@@ -791,7 +806,18 @@ class Anta extends React.Component {
     page.style.transition = `all 0.4s`;
     setTimeout(() => {
       page.style.visibility = "hidden";
+      const qrCode = document.querySelector(".qrCode");
+      qrCode.style.visibility = "hidden";
+
+      const page1 = document.querySelector(".inputcontet");
+      page1.style.transform = `translateY(0)`;
+      page1.style.opacity = 1;
     }, 380);
+    this.setState({
+      name: "",
+      sex: 1,
+      phone: "",
+    });
   }
 
   hiddenRealReport() {
@@ -812,6 +838,16 @@ class Anta extends React.Component {
     ) {
       message.error("请输入完整信息");
     } else {
+      // const page = document.querySelector(".inputcontet");
+      // page.style.transform = `translateY(40px)`;
+      // page.style.opacity = 0;
+      // page.style.transition = `all 0.4s`;
+
+      // const qrCode = document.querySelector(".qrCode");
+      // qrCode.style.visibility = "unset";
+      // qrCode.style.opacity = 1;
+      // qrCode.style.transition = `all 0.4s`;
+
       const page1 = document.querySelector(".reportInput");
       page1.style.transform = `translateY(40px)`;
       page1.style.opacity = 0;
@@ -910,7 +946,7 @@ class Anta extends React.Component {
       cameraY: window.innerWidth > 1020 ? 1400 : 1000,
       display: false,
       click: false,
-      bed: undefined,
+      bed: 'X7臻耀系列',
       sleep_pos: "--",
       breatheData: 0,
       moveData: 0,
@@ -918,7 +954,23 @@ class Anta extends React.Component {
       phone: "",
       name: "",
       sex: 1,
-      recomBed: [],
+      recomBed: [
+        {
+          img: "./img/X7.png",
+          bedName: "X7臻耀系列",
+          num: 5,
+        },
+        {
+          img: "./img/gj.png",
+          bedName: "S冠军系列",
+          num: 4,
+        },
+        {
+          img: "./img/S3.png",
+          bedName: "S3系列",
+          num: 4,
+        },
+      ],
       recomItem: 0,
       hardness: 50,
       spine: "",
@@ -949,7 +1001,6 @@ class Anta extends React.Component {
     this.setState({
       buttonFlag: value,
     });
-    // console.log('falsechangeButtonFlag',this.state.buttonFlag)
   }
   changeValueg(value) {
     this.setState({ valueg: value });
@@ -1004,7 +1055,7 @@ class Anta extends React.Component {
     page.style.transform = `translateY(0)`;
     page.style.opacity = 1;
     page.style.transition = `all 0.4s`;
-    // console.log(page.style)
+
     this.changeBedType();
   }
 
@@ -1147,19 +1198,18 @@ class Anta extends React.Component {
   }
 
   getBlobPng() {
-    // this.setState({
-    //   loading: true,
-    // });
-    const that = this;
-    console.log("png");
     const node = document.getElementById("node");
-    domtoimage.toBlob(node).then((blob) => {
-      // 调用file-save方法 直接保存图片
-      saveAs(blob, `${this.state.name}.png`);
-      // that.setState({
-      //   loading: false,
-      // });
-    });
+
+    domtoimage
+      .toBlob(node)
+      .then((blob) => {
+        // 调用file-save方法 直接保存图片
+
+        saveAs(blob, `${this.state.name}.png`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   changeBed(value) {
@@ -1171,9 +1221,7 @@ class Anta extends React.Component {
       .get(
         `http://192.168.31.40:8080/setBedName?bedName=${bedArr.indexOf(value)}`
       )
-      .then((res) => {
-        console.log(res);
-      });
+      .then((res) => {});
     if (configWs.readyState === 1) {
       configWs.send(
         JSON.stringify({
@@ -1182,11 +1230,11 @@ class Anta extends React.Component {
       );
     }
 
-    this.changeBedType();
+    this.changeBedType(value);
   }
 
-  changeBedType() {
-    const value = this.state.bed;
+  changeBedType(input) {
+    const value = input || this.state.bed;
     if (value === "新幻境系列") {
       if (this.state.recomItem == 0) {
         this.setState({
@@ -1758,6 +1806,23 @@ class Anta extends React.Component {
     }
   }
 
+  showQrcode(){
+    const page = document.querySelector(".reportInput1");
+    page.style.visibility = "unset";
+    page.style.transform = `translateY(0)`;
+    page.style.opacity = 1;
+    page.style.transition = `all 0.4s`;
+  }
+
+  hiddenQrcode(){
+    const page = document.querySelector(".reportInput1");
+    page.style.transform = `translateY(40px)`;
+    page.style.opacity = 0;
+    page.style.visibility = 'hidden'
+    page.style.transition = `all 0.4s`;
+   
+  }
+
   onSexChange(e) {
     this.setState({
       sex: e.target.value,
@@ -2256,7 +2321,6 @@ class Anta extends React.Component {
             className="reportInput"
             onClick={() => {
               this.hiddenReport();
-              console.log("click1");
             }}
           >
             <div
@@ -2265,48 +2329,66 @@ class Anta extends React.Component {
                 event.stopPropagation();
               }}
             >
-              <div className="inputItem">请输入信息</div>
-              <div className="inputItem">
-                <div className="itemName">姓名</div>
-                <Input
-                  value={this.state.name}
-                  onChange={(e) => {
-                    this.setState({
-                      name: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="inputItem">
-                <div className="itemName">性别</div>
-                <Radio.Group onChange={this.onSexChange} value={this.state.sex}>
-                  <Radio value={1}>男</Radio>
-                  <Radio value={2}>女</Radio>
-                </Radio.Group>
-              </div>
-              <div className="inputItem">
-                <div className="itemName">联系方式</div>
-                <Input
-                  value={this.state.phone}
-                  // type={'number'}
-                  onChange={(e) => {
-                    // const value=e.target.value
+              <div className="inputcontet">
+                <div className="inputItem">请输入信息</div>
+                <div className="inputItem">
+                  <div className="itemName">姓名</div>
+                  <Input
+                    value={this.state.name}
+                    onChange={(e) => {
+                      this.setState({
+                        name: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="inputItem">
+                  <div className="itemName">性别</div>
+                  <Radio.Group
+                    onChange={this.onSexChange}
+                    value={this.state.sex}
+                  >
+                    <Radio value={1}>男</Radio>
+                    <Radio value={2}>女</Radio>
+                  </Radio.Group>
+                </div>
+                <div className="inputItem">
+                  <div className="itemName">联系方式</div>
+                  <Input
+                    value={this.state.phone}
+                    // type={'number'}
+                    onChange={(e) => {
+                      // const value=e.target.value
 
-                    this.setState({
-                      phone: e.target.value,
-                    });
-                  }}
+                      this.setState({
+                        phone: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="reportButton">
+                  <Button
+                    onClick={() => {
+                      this.showReport();
+                    }}
+                  >
+                    生成报告
+                  </Button>
+                </div>
+              </div>
+              {/* <div className="qrCode">
+                <QRCode
+                  value={`http://192.168.31.220:3000/#/report?bedName=${
+                    this.state.recomBed[0]?.bedName
+                  }&bedImg=${this.state.recomBed[0]?.img}&bedNum=${
+                    this.state.recomBed[0]?.num
+                  }&nowBreath=${this.state.nowBreath.toFixed(0)}&nowMove=${
+                    this.state.nowMove
+                  }&nowPress=${this.state.nowPress.toFixed(0)}&name=${
+                    this.state.name
+                  }&sex=${this.state.sex}&phone=${this.state.phone}`}
                 />
-              </div>
-              <div className="reportButton">
-                <Button
-                  onClick={() => {
-                    this.showReport();
-                  }}
-                >
-                  生成报告
-                </Button>
-              </div>
+              </div> */}
             </div>
           </div>
           <div
@@ -2321,7 +2403,6 @@ class Anta extends React.Component {
 
             <div className="recomContent">
               {this.state.recomBed.map((item, index) => {
-                // console.log(this.state.recomBed[item]?.num)
                 return (
                   <div className="recomItem">
                     <div
@@ -2467,28 +2548,41 @@ class Anta extends React.Component {
             </div>
           </div>
         </div>
-        {/* {this.state.loading ? (
-          <div
-            style={{
-              display: "flex",
-              zIndex: 301,
-              position: "fixed",
-              width: "100%",
-              height: "100%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <Spin />
-          </div>
-        ) : null} */}
+
         <div
-          className="reportPage"
+          className="reportPage homeReportPage"
           onClick={() => {
             this.hiddenRealReport();
           }}
         >
+           <div
+            className="reportInput1"
+            onClick={(event) => {
+              this.hiddenQrcode();
+              event.stopPropagation();
+            }}
+          >
+            <div
+              className="inputContent"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+            >
+              <div className="qrCode">
+                <QRCode
+                  value={`http://192.168.31.220:3000/#/report?bedName=${
+                    this.state.recomBed[0]?.bedName
+                  }&bedImg=${this.state.recomBed[0]?.img}&bedNum=${
+                    this.state.recomBed[0]?.num
+                  }&nowBreath=${this.state.nowBreath.toFixed(0)}&nowMove=${
+                    this.state.nowMove
+                  }&nowPress=${this.state.nowPress.toFixed(0)}&name=${
+                    this.state.name
+                  }&sex=${this.state.sex}&phone=${this.state.phone}`}
+                />
+              </div>
+            </div>
+          </div>
           <div
             id="node"
             className="reportContent"
@@ -2496,6 +2590,7 @@ class Anta extends React.Component {
               event.stopPropagation();
             }}
           >
+            
             <div className="reportTitle">
               <img src={nature} alt="" />
               <img src={titleRight} alt="" />
@@ -2580,7 +2675,8 @@ class Anta extends React.Component {
           >
             <Button
               onClick={(event) => {
-                this.getBlobPng();
+                // this.getBlobPng();
+                this.showQrcode()
                 event.stopPropagation();
               }}
             >

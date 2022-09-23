@@ -294,7 +294,7 @@
     padding-left:  10;
     align-items: center;
     color: #ff0808;
-    flex-direction: column;
+    /* flex-direction: column; */
 }
 #root .color .ant-slider-track{
     background-color: #ff0808;

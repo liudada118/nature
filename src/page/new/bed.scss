@@ -109,8 +109,11 @@
 }
 
 .reportInput{
-    width: 100vw;
-    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
     color: #fff;
@@ -118,6 +121,27 @@
     justify-content: center;
     background-color: rgba(0,0,0,0.7);
     position: absolute;
+    z-index: 300;
+    top: 0;
+    transform: translateY(40px);
+    opacity: 0;
+    visibility: hidden;
+    color: #000;
+}
+
+.reportInput1{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 98vw;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.7);
+    // position: absolute;
     z-index: 300;
     top: 0;
     transform: translateY(40px);
@@ -134,7 +158,10 @@
 .inputContent{
     padding: 20px;
     background-color: rgba(255,255,255,1);
-    box-shadow: 0 0px 5px 5px rgba(0,255,255,0.3),
+    box-shadow: 0 0px 5px 5px rgba(0,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 // .inputItem input {
 //     width: 100px;
@@ -234,7 +261,7 @@
 
 .recomName{
     white-space: nowrap;
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 // .recomItem:nth-child(2n-1){
@@ -262,10 +289,21 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    display: none;
+   
     top: 0;
     flex-direction: column;
     z-index: 300;
+}
+
+.homeReportPage{
+    display: none;
+}
+
+.qrCode{
+    // display: none;
+    // visibility: hidden;
+    // opacity: 0;
+    // position: absolute;
 }
 
 .reportTitle {
@@ -281,7 +319,7 @@
 }
 
 .personInfo{
-    font-size: 1rem;
+    font-size: 1.5rem;
 }
 
 .reportMain {
@@ -324,7 +362,7 @@
 }
 
 .personImg img{
-    width: 70%;
+    width: 80%;
 }
 
 
@@ -335,7 +373,8 @@
     position: relative;
     color: #fff;
     align-items: end;
-    
+    -webkit-align-items:end;
+    position: relative;
 }
 .reportRecomImg{
     margin-right: 2rem;
@@ -371,15 +410,20 @@
     color: #00ffff;
     align-items: center;
 }
+.reportDataContent .dataItem{
+    width: 9rem;
+    height: 9rem;
+}
 
 .reportRecomBed{
     width: 70%;
     position: absolute;
-    height: 90%;
+    height: 85%;
     display: flex;
     align-items: baseline;
     justify-content: center;
     flex-direction: column;
+    bottom: 0;
 }
 
 .reportRecomInfo{
@@ -403,3 +447,36 @@
 .reportRecomed img{
     width: 2rem;
 }
+
+@media screen and (min-width: 300px) and (max-width: 999px){
+    .reportMain {
+      font-size: 3rem;
+    }
+    .reportTitle{
+        height: 6rem;
+    }
+    .personInfo{
+        font-size: 2.5rem;
+    }
+    .reportDataContent .dataItem{
+        width : 15rem;
+        height: 15rem;
+    }
+    .reportDataContent{
+        padding: 0;
+    }
+    .reportContent{
+        padding: 3rem 3rem;
+    }
+    .reportPage{
+        min-height: 100vh;
+    }
+    .personImg{
+        width: 60%;
+    }
+    .dataItem{
+        font-size: 2rem;
+    }
+  }
+  
+  

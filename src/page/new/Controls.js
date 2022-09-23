@@ -43,15 +43,15 @@ const Controls = (props) => {
       props.changeStart()
     };
     controls.current.addEventListener("change", function () {
- 
+      // console.log('change')
     });
     controls.current.addEventListener("end", function () {
-   
+      // console.log('end')
       props.changeCameraFlag(false)
       props.changeEnd()
     });
     controls.current.addEventListener("start", function () {
-      
+      // console.log('start')
       props.changeCameraFlag(true)
       props.changeStart()
     });

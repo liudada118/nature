@@ -1,4 +1,6 @@
 /** @format */
+export const ip1 = 'ws://192.168.31.110:8080'
+export const ip2 = 'ws://192.168.31.40:8080'
 
 export function addSide(arr, width, height, wnum, hnum, sideNum) {
   let narr = new Array(height)
