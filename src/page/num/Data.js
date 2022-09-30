@@ -24,7 +24,7 @@ export default function Data() {
         for (let i = 0; i < 32; i++) {
           a[i] = []
           for (let j = 0; j < 64; j++) {
-            a[i].push(wsPointData[i * 32 + j])
+            a[i].push(wsPointData[i * 64 + j])
           }
         }
 

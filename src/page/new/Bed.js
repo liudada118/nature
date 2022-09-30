@@ -575,7 +575,7 @@ class Anta extends React.Component {
     //   myChart: this.myChart2,
     //   color: '#2ac1e9',
     // })
-
+    document.title='大自然'
     window.addEventListener("mouseout", () => {});
     document.addEventListener("DOMMouseScroll", () => {}, false);
 
@@ -804,14 +804,15 @@ class Anta extends React.Component {
     page.style.transform = `translateY(40px)`;
     page.style.opacity = 0;
     page.style.transition = `all 0.4s`;
+    page.style.visibility = "hidden";
     setTimeout(() => {
-      page.style.visibility = "hidden";
-      const qrCode = document.querySelector(".qrCode");
-      qrCode.style.visibility = "hidden";
+      // page.style.visibility = "hidden";
+      // const qrCode = document.querySelector(".qrCode");
+      // qrCode.style.visibility = "hidden";
 
-      const page1 = document.querySelector(".inputcontet");
-      page1.style.transform = `translateY(0)`;
-      page1.style.opacity = 1;
+      // const page1 = document.querySelector(".inputcontet");
+      // page1.style.transform = `translateY(0)`;
+      // page1.style.opacity = 1;
     }, 380);
     this.setState({
       name: "",
