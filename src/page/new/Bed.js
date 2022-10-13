@@ -196,7 +196,7 @@ function Particles(props) {
   let fSmooth = 0,
     LSmooth = 0;
   useFrame((state, delta) => {
-    // state.camera.lookAt(0,0,0)
+    // state.camera.lookAt(0,-0,200)  
 
     // if (i < 6) {
     //   i++
@@ -289,7 +289,7 @@ function Particles(props) {
         );
       }
     }else if (
-        !comp(state.camera.position.y,oldPositionY)
+        !comp(state.camera.position.y,oldPositionY) && configWs.readyState === 1
       ) {
       
         cameraY = state.camera.position.y

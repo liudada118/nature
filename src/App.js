@@ -16,10 +16,10 @@ export default function App() {
   return (
     <HashRouter >
       <Routes>
-        {/* <Route path="/" element={<New />} />
+        <Route path="/" element={<New />} />
         <Route path="/re" element={<Recom />} />
-        <Route path="/report" element={<Report />} /> */}
-        <Route path="/" element={<Data />} />
+        <Route path="/report" element={<Report />} />
+        {/* <Route path="/" element={<Data />} /> */}
         {/* <Route path="/num" element={<Num />} /> */}
         {/* <Route path="/col" element={<Col />} />
         <Route path="/col1" element={<Col1 />} /> */}

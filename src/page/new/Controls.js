@@ -69,6 +69,7 @@ const Controls = (props) => {
         CTRL_KEY, // zoom
         CMD_KEY, // pan
       ]}
+      // autoRotate={true}
       start={() => {
       
         
