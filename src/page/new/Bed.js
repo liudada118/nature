@@ -198,6 +198,12 @@ function Particles(props) {
   useFrame((state, delta) => {
     // state.camera.lookAt(0,-0,200)  
 
+
+   
+    // if(state.camera.rotation.x> 0.1){
+    //   state.camera.rotation.x = 0.1
+    // }
+    console.log(state.camera.position)
     // if (i < 6) {
     //   i++
     //   wsPointData = null;
@@ -2571,7 +2577,7 @@ class Anta extends React.Component {
             >
               <div className="qrCode">
                 <QRCode
-                  value={`http://192.168.31.220:3000/#/report?bedName=${
+                  value={`http://192.168.31.40/#/report?bedName=${
                     this.state.recomBed[0]?.bedName
                   }&bedImg=${this.state.recomBed[0]?.img}&bedNum=${
                     this.state.recomBed[0]?.num
