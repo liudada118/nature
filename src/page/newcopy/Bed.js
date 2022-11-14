@@ -2612,7 +2612,7 @@ class Anta extends React.Component {
             >
               <div className="qrCode">
                 <QRCode
-                  value={`http://sensor.bodyta.com/report?bedName=${
+                  value={`http://192.168.31.40/#/report?bedName=${
                     this.state.recomBed[0]?.bedName
                   }&bedImg=${this.state.recomBed[0]?.img}&bedNum=${
                     this.state.recomBed[0]?.num

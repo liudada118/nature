@@ -141,11 +141,13 @@ let cameraFlag = false;
 const id = new Date().getTime();
 let nowId;
 let newDate = new Date().getTime(),
+ change1 = false,
   oldDate;
 let DataFlag = false,
   buttonFlag = false;
 let progress = 50;
 let rotateZ = 0;
+let time = 0 , oldTime = 0 , newTime = 0 , colorValue = 390;
 function Particles(props) {
   let i = 1;
 
@@ -197,7 +199,7 @@ function Particles(props) {
     LSmooth = 0;
   useFrame((state, delta) => {
     // state.camera.lookAt(0,-0,200)
-    console.log(state.camera.position)
+    // console.log(state.camera.position)
     if (props.item == 0) {
       // state.camera.position.z = 0;
       // state.camera.position.x = 0;
@@ -413,7 +415,7 @@ function Particles(props) {
 
             positions[i + 1] = smoothBig[j] * props.value; // y
             // const rgb = jet1(0, props.valuej, props.valuej1, props.valuej2, props.valuej3, smoothBig[j])
-            const rgb = jet(0, props.valuej1, smoothBig[j]);
+            const rgb = jet(0, colorValue, smoothBig[j]);
             colors[i] = rgb[0] / 255;
             colors[i + 1] = rgb[1] / 255;
             colors[i + 2] = rgb[2] / 255;
@@ -504,6 +506,7 @@ class Com extends React.Component {
 
 class Anta extends React.Component {
   message(e) {
+    let newTime = new Date().getTime()
     bigArrg = null;
     bigArrp = null;
     smoothBig = null;
@@ -537,6 +540,7 @@ class Anta extends React.Component {
       });
 
       const allPress = wsPointData1.reduce((a, b) => a + b, 0);
+      // console.log(allPress)
       const allNum = wsPointData1.filter((a) => a > 0).length;
       this.setState({
         press: allNum > 0 ? allPress / allNum : 0,
@@ -552,7 +556,22 @@ class Anta extends React.Component {
       //   this.setState({
       //     numArr32 : a
       //   })
-
+      console.log(allPress)
+      if(allPress > 20000 && oldTime > 0 && parseInt(time/1000) <= 20){
+        time+= newTime - oldTime
+        if(allPress < 28000 && !change1){
+          time = 0
+          change1 = true
+        }
+        if(allPress > 28000){
+          change1 = false
+        }
+      }
+      // this.setState({
+      //   valuej : 390 + (700 - 390)*(parseInt(time/1000))/20
+      // })
+      colorValue = 390 + (700 - 390)*(parseInt(time/1000))/20
+      console.log(this.state.valuej,time)
       /**
        * 添加边框(避免高斯溢出)
        * */
@@ -561,6 +580,7 @@ class Anta extends React.Component {
       /**
        * 计算压力最大面积，最大值，平均值
        * */
+      oldTime = newTime
     } else {
       progress = progress + (jsonObject.hardness_degree - progress) / 10;
 
@@ -944,7 +964,7 @@ class Anta extends React.Component {
       postitonY: window.innerWidth > 768 ? -400 : -400, //-250,
       postitonZ: window.innerWidth > 768 ? 100 : 100, //-450,
       time: 0,
-      valuej1: 1200,
+      valuej1: 390,
       loading: false,
       // Number(localStorage.getItem("valuej1"))
       //   ? Number(localStorage.getItem("valuej1"))
@@ -955,9 +975,7 @@ class Anta extends React.Component {
       valuej3: Number(localStorage.getItem("valuej3"))
         ? Number(localStorage.getItem("valuej3"))
         : 1200, // 饱和度
-      valuej: Number(localStorage.getItem("valuej"))
-        ? Number(localStorage.getItem("valuej"))
-        : 1200, // 饱和度
+      valuej: 390, // 饱和度
       valueg1: 3,
       //  Number(localStorage.getItem("valueg1"))
       //   ? Number(localStorage.getItem("valueg1"))
@@ -1933,53 +1951,7 @@ class Anta extends React.Component {
               width: "65%",
             }}
           >
-            <div style={{ width: "20%", marginRight: 30 }}>
-              <img src={nature} style={{ width: "100%" }} alt="" />
-            </div>
-            {/* <Select defaultValue="梦境经典" style={{width: 240}} onChange={this.handleBedChange.bind(this)}>
-              {bedArr.map((item, index) => {
-                return (
-                  <Option key={item} value={item}>
-                    {item}
-                  </Option>
-                )
-              })}
-              <img src={down} alt="" />
-            </Select> */}
-            {/* <select id="group" value="2">
-              <option value="1">Dimond111111111111111</option>
-              <option value="2">vertical</option>
-            </select> */}
-
-            <Select
-              ref={this.select}
-              showSearch
-              placeholder="请选择床垫类型"
-              optionFilterProp="children"
-              onChange={this.onChange}
-              onSearch={this.onSearch}
-              maxTagCount={12}
-              size="large"
-              // options={[{
-              //   title : false
-              // }]}
-              // min-width={300}
-              value={this.state.bed}
-              listHeight={400}
-              style={{ minWidth: "10%" }}
-              onSelect={(value) => {
-                this.changeBed(value);
-              }}
-              dropdownMatchSelectWidth={300}
-            >
-              {bedArr.map((item, index) => {
-                return (
-                  <Option key={item} value={item}>
-                    {item}
-                  </Option>
-                );
-              })}
-            </Select>
+            
           </div>
 
           <div
@@ -2013,7 +1985,10 @@ class Anta extends React.Component {
                 <div className="comfortTitle">床垫舒适度</div>
                 <div className="postContent">
                   <div className="postInfo">
-                    <div className="post">睡姿:{this.state.sleep_pos}</div>
+                    <div className="post">睡姿: 
+                    {/* {this.state.sleep_pos} */}
+                    平躺
+                    </div>
                     <div className="spine">脊柱:{this.state.spine}</div>
                   </div>
                   <div className="postImg">
@@ -2612,7 +2587,7 @@ class Anta extends React.Component {
             >
               <div className="qrCode">
                 <QRCode
-                  value={`http://sensor.bodyta.com/report?bedName=${
+                  value={`http://192.168.31.40/#/report?bedName=${
                     this.state.recomBed[0]?.bedName
                   }&bedImg=${this.state.recomBed[0]?.img}&bedNum=${
                     this.state.recomBed[0]?.num

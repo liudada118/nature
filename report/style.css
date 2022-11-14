@@ -1,0 +1,199 @@
+.reportPage {
+    width: 100%;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+   
+    top: 0;
+    flex-direction: column;
+    z-index: 300;
+}
+
+.homeReportPage{
+    display: none;
+}
+
+/* .qrCode{
+     display: none;
+     visibility: hidden;
+     opacity: 0;
+     position: absolute;
+} */
+
+.reportTitle {
+    height: 5rem;
+    display: flex;
+    justify-content:space-between
+}
+
+
+
+.reportTitle img {
+    height: 100%;
+}
+
+.personInfo{
+    font-size: 1.5rem;
+}
+
+.reportMain {
+    color: #fff;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.dataContent {
+    display: 'flex';
+    justify-content: 'space-around';
+    padding: 0 5rem 1rem;
+    color: #00ffff;
+    align-items: center;
+}
+
+.reportMain{
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.postImg {
+    width: 13rem;
+}
+
+.postImg img {
+    width: 100%;
+}
+
+
+.personContent{
+    display: flex;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+}
+
+.personImg{
+    width: 70%;
+}
+
+.personImg img{
+    width: 80%;
+}
+
+
+.reportRecom{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    color: #fff;
+    align-items: end;
+    -webkit-align-items:end;
+    position: relative;
+}
+.reportRecomImg{
+    margin-right: 2rem;
+    width: 100%;
+    
+}
+.reportRecom img{
+    width: 100%;
+}
+
+.recomImg{
+     background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    margin-right: 1rem;
+}
+
+.recomImg img{
+    width: 100%;
+    height: 100%;
+}
+.reportContent{
+    background-color: #0f0f40;
+    width: 80%;
+    padding: 5rem 10rem;
+}
+
+.reportDataContent{
+    display: flex;
+    justify-content: space-around;
+    padding: 0 5rem 1rem;
+    color: #00ffff;
+    align-items: center;
+}
+.reportDataContent .dataItem{
+    width: 9rem;
+    height: 9rem;
+}
+
+.reportRecomBed{
+    width: 70%;
+    position: absolute;
+    height: 85%;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    flex-direction: column;
+    bottom: 0;
+}
+
+.reportRecomInfo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%
+}
+
+
+.reportRecomName{
+    white-space: nowrap;
+    font-size: 1.5rem;
+}
+
+.reportRecomed{
+    font-size: 2.5rem;
+    
+}
+.reportRecomed img{
+    width: 2rem;
+}
+
+@media screen and (min-width: 300px) and (max-width: 999px){
+    .reportMain {
+      font-size: 3rem;
+    }
+    .reportTitle{
+        height: 6rem;
+    }
+    .personInfo{
+        font-size: 2.5rem;
+    }
+    .reportDataContent .dataItem{
+        width : 15rem;
+        height: 15rem;
+    }
+    .reportDataContent{
+        padding: 0;
+    }
+    .reportContent{
+        padding: 3rem 3rem;
+    }
+    .reportPage{
+        min-height: 100vh;
+    }
+    .personImg{
+        width: 60%;
+    }
+    .dataItem{
+        font-size: 2rem;
+    }
+  }
+  
+  

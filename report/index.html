@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<script>
+  document.title='大自然'
+  const doc = document.documentElement;
+    doc.style.fontSize = `${window.innerWidth / 100}px`;
+    doc.addEventListener("DOMContentLoaded", Resize);
+
+    window.addEventListener("resize", Resize);
+</script>
+<body>
+    <div
+      class="reportPage"
+     
+    >
+     
+      <div
+        id="node"
+        class="reportContent"
+        
+      >
+        <div class="reportTitle">
+          <img src="./img/nat.png" alt="" />
+          <img src="./image1/titleRight.png" alt="" />
+        </div>
+        <div class="reportMain fontFounder">专属定制报告</div>
+        <div class="personContent">
+          <div class="personImg">
+            <img src="image1/body.png" alt="" />
+          </div>
+          <div class="personInfo">
+            <p>姓名: {decodeURI(value.name)}</p>
+            <p>性别: {value.sex == 1 ? "男" : "女"}</p>
+            <p>联系方式: {decodeURI(value.phone)}</p>
+          </div>
+        </div>
+
+        <div class="reportDataContent">
+          <div class="dataItem">
+            <img class="dataItemImg" src="./image1/item.png" alt="" />
+            <div>
+              <div>呼吸</div>
+              <div>{value.nowBreath}次/min</div>
+            </div>
+          </div>
+          <div class="dataItem">
+            <img class="dataItemImg" src="./image1/item.png" alt="" />
+            <div>
+              <div>体动</div>
+              <div>{value.nowMove}次/min</div>
+            </div>
+          </div>
+          <div class="dataItem">
+            <img class="dataItemImg" src="./image1/item.png" alt="" />
+            <div>
+              <div>平均压力</div>
+              <div>{value.nowPress}mmhg</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reportRecom">
+          <img src={recomBox} alt="" />
+          <div class="reportRecomBed">
+            <div class="reportRecomInfo">
+              <div class="reportRecomImg">
+                <img src={value.bedImg} alt="" />
+              </div>
+              <div class="reportRecomName">
+                {decodeURI(value.bedName)}
+              </div>
+            </div>
+            <div class="reportRecomed">
+              推荐指数:&nbsp;
+              <!-- {new Array(5).fill(0).map((item, index) => {
+               
+                return (
+                  <img
+                    key={index}
+                    style={{
+                      display:
+                        index < Number(value.bedNum) ? "unset" : "none",
+                    }}
+                    src={star}
+                    alt=""
+                  />
+                );
+              })} -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+</body>
+</html>

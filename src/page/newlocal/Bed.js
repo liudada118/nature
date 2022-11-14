@@ -64,6 +64,8 @@ const SEPARATION = 20,
   AMOUNTY = 128 + 2 * 4;
 let wsPointData = new Array(36 * 68).fill(1);
 let wsPointData1 = new Array(2048).fill(0);
+let wsPointData2 = new Array(2048).fill(0);
+let wsPointData3 = new Array(2048).fill(0);
 let bigArrg = new Array(AMOUNTX * AMOUNTY).fill(1);
 let bigArrp = new Array(AMOUNTX * AMOUNTY).fill(1);
 let smoothBig = new Array(AMOUNTX * AMOUNTY).fill(1);
@@ -78,6 +80,8 @@ let newState = [0, 0, 0],
   oldCameraRotation = "{}",
   newCameraRotation = "{}";
 const { Option } = Select;
+let firstData1 = [];
+let lastData1 = [];
 let sleepType;
 let timerErr;
 let wsFlag = false;
@@ -523,11 +527,11 @@ class Anta extends React.Component {
     let jsonObject = JSON.parse(e.data);
     //处理空数组
     if (jsonObject.data != null) {
-      wsPointData = null;
-      wsPointData1 = null;
-      wsPointData = jsonObject.data;
-      wsPointData1 = wsPointData;
-
+      // wsPointData = null;
+      // wsPointData1 = null;
+      wsPointData3 = jsonObject.data;
+      wsPointData1 = wsPointData3;
+      // console.log(wsPointData)
       wsPointData1 = wsPointData1.map((a) => {
         if (a < this.state.filter) {
           return 0;
@@ -536,8 +540,59 @@ class Anta extends React.Component {
         }
       });
 
-      const allPress = wsPointData1.reduce((a, b) => a + b, 0);
-      const allNum = wsPointData1.filter((a) => a > 0).length;
+      if (wsPointData3[wsPointData3.length - 1] == 0) {
+        firstData1 = [...wsPointData3];
+        firstData1.pop();
+        // for(let i = 0 ; i < 32 ; i ++ ){
+        //   for(let j = 0 ; j < 9 ; j ++){
+        //     [firstData1[i*32 + 16-j] , firstData1[i*32 + j]] = [firstData1[i*32 + j] ,firstData1[i*32 + 16-j] ]
+        //   }
+        // }
+        // for(let i = 0 ; i < 32 ; i++){
+        // 	for(let j = 0 ; j <i ; j++){
+        // 		[firstData1[i*32+j] , firstData1[(j)*32+i]] = [firstData1[(j)*32+i],firstData1[i*32+j] ]
+        // 	}
+        // }
+        // for(let i = 0; i < 32 ; i++){
+        // 	for(let j = 0 ; j < 8  ; j ++){
+        // 		[firstData1[i*32  + j] , firstData1[i*32 + 16 - j]] = [ firstData1[i*32 + 16 - j],firstData1[i*32 + j]]
+        // 	}
+        // }
+      }
+      if (wsPointData3[wsPointData3.length - 1] == 1) {
+        lastData1 = [...wsPointData3];
+        lastData1.pop();
+        // for(let i = 0 ; i < 32 ; i ++ ){
+        //   for(let j = 0 ; j < 9 ; j ++){
+        //     [lastData1[i*32 + 16-j] , lastData1[i*32 + j]] = [lastData1[i*32 + j] ,lastData1[i*32 + 16-j] ]
+        //   }
+        // }
+        // for (let i = 0; i < 16; i++) {
+        //   for (let j = 0; j < 32; j++) {
+        //     [lastData1[i * 32 + j], lastData1[(31 - i) * 32 + j]] = [lastData1[(31 - i) * 32 + j], lastData1[i * 32 + j]]
+        //   }
+        // }
+
+        // for (let i = 0; i < 32; i++) {
+        //   for (let j = 0; j < 8; j++) {
+        //     [lastData1[i * 32 + 15 + j], lastData1[i * 32 + 31 - j]] = [lastData1[i * 32 + 31 - j], lastData1[i * 32 + 15 + j]]
+        //   }
+        // }
+
+        let a = [];
+        for (let i = 0; i < 32; i++) {
+          for (let j = 0; j < 32; j++) {
+            a.push(firstData1[i * 32 + j])
+          }
+          for (let j = 0; j < 32; j++) {
+            a.push(lastData1[i * 32 + j]);
+          }
+        }
+        wsPointData2 = a;
+
+
+        const allPress = wsPointData2.reduce((a, b) => a + b, 0);
+      const allNum = wsPointData2.filter((a) => a > 0).length;
       this.setState({
         press: allNum > 0 ? allPress / allNum : 0,
       });
@@ -545,7 +600,7 @@ class Anta extends React.Component {
       //   for (let i = 0; i < 32; i++) {
       //     a[i] = []
       //     for (let j = 0; j < 64; j++) {
-      //       a[i].push(wsPointData1[i * 32 + j])
+      //       a[i].push(wsPointData2[i * 32 + j])
       //     }
       //   }
 
@@ -556,7 +611,10 @@ class Anta extends React.Component {
       /**
        * 添加边框(避免高斯溢出)
        * */
-      wsPointData = addSide(wsPointData1, 64, 32, 2, 2, 0);
+      wsPointData = addSide(wsPointData2, 64, 32, 2, 2, 0);
+      }
+
+      
 
       /**
        * 计算压力最大面积，最大值，平均值
@@ -635,7 +693,7 @@ class Anta extends React.Component {
         return;
       }
       if (wsFlag) {
-        ws = new WebSocket(`ws://192.168.31.40:8080/serial/${id}`);
+        ws = new WebSocket(`ws://127.0.0.1:19999`);
         ws.onmessage = (e) => {
           this.message(e);
         };
@@ -808,7 +866,7 @@ class Anta extends React.Component {
     };
     configWs.onclose = (e) => {};
 
-    ws = new WebSocket(`ws://192.168.31.40:8080/serial/${id}`);
+    ws = new WebSocket(`ws://127.0.0.1:19999`);
     ws.onopen = () => {
       // connection opened
     };

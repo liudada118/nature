@@ -34,9 +34,8 @@ useEffect(() => {
 } ,[])
 
 const getQuery = (val) => {
-  console.log(window.location.search)
-  const w = window.location.search.indexOf('?');
-  const query = window.location.search.substring(w + 1);
+  const w = window.location.hash.indexOf('?');
+  const query = window.location.hash.substring(w + 1);
 
   const vars = query.split('&').reduce((res,item) => {
     var parts = item.split('=')

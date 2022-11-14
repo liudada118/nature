@@ -1,0 +1,485 @@
+*{
+    padding: 0;
+    margin: 0; 
+}
+
+.com .dataItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    font-size: 0.8rem;
+    text-align: center;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-name: breathe;
+    -webkit-animation-duration: 1500ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    border-radius: 3rem;
+}
+
+.dataItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    font-size: 0.8rem;
+    text-align: center;
+    
+}
+
+.dataItem img {
+    width: 100%;
+}
+
+.dataItemImg {
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+
+
+.dataContent {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 5rem 1rem;
+    color: #00ffff;
+    align-items: center;
+}
+
+.reportDataContent{
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}
+
+.postContent {
+    display: flex;
+    align-items: center;
+}
+
+.postInfo{
+    margin-right: 2rem;
+    width: 8rem;
+}
+
+.postContent{
+    margin-bottom: 1.5rem;
+}
+
+.degreeProgress {
+    display: flex;
+    position: relative;
+    align-items: center;
+
+}
+
+.progressStrip {
+    width: 100%;
+    background-color: #282a3f;
+    height: 10px;
+    border-radius: 5px;
+    border: #00b5f1 solid 2px;
+}
+
+.progressRound {
+    height: 20px;
+    background-color: #fff;
+    width: 20px;
+    border-radius: 10px;
+    border: 4px #00ffff solid;
+    position: absolute;
+}
+
+.degreeInfo{
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    height: 5rem;
+}
+
+.button img {
+    height: 100%;
+}
+
+.reportInput{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    z-index: 300;
+    top: 0;
+    transform: translateY(40px);
+    opacity: 0;
+    visibility: hidden;
+    color: #000;
+}
+
+.reportInput1{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 98vw;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.7);
+    // position: absolute;
+    z-index: 300;
+    top: 0;
+    transform: translateY(40px);
+    opacity: 0;
+    visibility: hidden;
+    color: #000;
+}
+
+.inputItem{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.inputContent{
+    padding: 20px;
+    background-color: rgba(255,255,255,1);
+    box-shadow: 0 0px 5px 5px rgba(0,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+// .inputItem input {
+//     width: 100px;
+// }
+.itemName{
+    width: 100px;
+}
+
+.recomPage {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    position: absolute;
+    z-index: 300;
+    top: 0;
+    transform: translateY(40px);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.reportButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes breathe {
+    0% {
+        opacity: .7;
+        box-shadow: 0 1px 5px rgba(0,255,255,0.3), 0 1px 5px rgba(0,255,255,0.3) inset;
+    }
+
+    100% {
+        opacity: 1;
+        // border: 1px solid rgba(187, 5, 14, 0.7);
+        box-shadow: 0 1px 5px 8px rgba(0,255,255,0.3), 0 1px 5px 8px rgba(0,255,255,0.3) inset;
+    }
+}
+
+.ant-modal-content{
+    z-index: 500;
+}
+
+.recomBgContent{
+
+    width: 100vw;height: 100vh;
+    background-color: rgba(0,0,0,1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+}
+
+.recomBg {
+    width: 90vw;
+    height: 90vh;
+    background-image: url('../../assets/image1/recomBig.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    position: fixed;
+}
+
+
+
+
+.recomContent{
+    width: 60%;
+    height: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    color: #fff;
+    align-items:center;
+    justify-content: space-around;
+}
+
+.recomBigItem
+
+.recomInfos {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+
+
+.recomItem {
+    flex: 0 0 40%;
+    height: 40%;
+}
+
+.recomName{
+    white-space: nowrap;
+    font-size: 1.5rem;
+    width: 8rem;
+    font-weight: bold;
+}
+
+// .recomItem:nth-child(2n-1){
+//     margin-bottom: 2rem;
+// }
+
+.recomed{
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+   
+    // justify-content: center;
+    margin-left: 1rem;
+    // width: 100%;
+}
+
+.recomed img {
+    width: 1.5rem
+}
+
+.reportPage {
+    width: 100%;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+   
+    top: 0;
+    flex-direction: column;
+    z-index: 300;
+}
+
+.homeReportPage{
+    display: none;
+}
+
+.qrCode{
+    // display: none;
+    // visibility: hidden;
+    // opacity: 0;
+    // position: absolute;
+}
+
+.reportTitle {
+    height: 5rem;
+    display: flex;
+    justify-content:space-between
+}
+
+
+
+.reportTitle img {
+    height: 100%;
+}
+
+.personInfo{
+    font-size: 1.5rem;
+}
+
+.reportMain {
+    color: #fff;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.dataContent {
+    display: 'flex';
+    justify-content: 'space-around';
+    padding: 0 5rem 1rem;
+    color: #00ffff;
+    align-items: center;
+}
+
+.reportMain{
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.postImg {
+    width: 13rem;
+}
+
+.postImg img {
+    width: 100%;
+}
+
+
+.personContent{
+    display: flex;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+}
+
+.personImg{
+    width: 70%;
+}
+
+.personImg img{
+    width: 80%;
+}
+
+
+.reportRecom{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    color: #fff;
+    align-items: end;
+    -webkit-align-items:end;
+    position: relative;
+}
+.reportRecomImg{
+    margin-right: 2rem;
+    width: 100%;
+    
+}
+.reportRecom img{
+    width: 100%;
+}
+
+.recomImg{
+     background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    margin-right: 1rem;
+}
+
+.recomImg img{
+    width: 100%;
+    height: 100%;
+}
+.reportContent{
+    background-color: #0f0f40;
+    width: 80%;
+    padding: 5rem 10rem;
+}
+
+.reportDataContent{
+    display: flex;
+    justify-content: space-around;
+    padding: 0 5rem 1rem;
+    color: #00ffff;
+    align-items: center;
+}
+.reportDataContent .dataItem{
+    width: 9rem;
+    height: 9rem;
+}
+
+.reportRecomBed{
+    width: 70%;
+    position: absolute;
+    height: 85%;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    flex-direction: column;
+    bottom: 0;
+}
+
+.reportRecomInfo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%
+}
+
+
+.reportRecomName{
+    white-space: nowrap;
+    font-size: 1.5rem;
+}
+
+.reportRecomed{
+    font-size: 2.5rem;
+    
+}
+.reportRecomed img{
+    width: 2rem;
+}
+
+@media screen and (min-width: 300px) and (max-width: 999px){
+    .reportMain {
+      font-size: 3rem;
+    }
+    .reportTitle{
+        height: 6rem;
+    }
+    .personInfo{
+        font-size: 2.5rem;
+    }
+    .reportDataContent .dataItem{
+        width : 15rem;
+        height: 15rem;
+    }
+    .reportDataContent{
+        padding: 0;
+    }
+    .reportContent{
+        padding: 3rem 3rem;
+    }
+    .reportPage{
+        min-height: 100vh;
+    }
+    .personImg{
+        width: 60%;
+    }
+    .dataItem{
+        font-size: 2rem;
+    }
+  }
+  
+  

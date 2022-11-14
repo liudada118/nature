@@ -67,7 +67,7 @@ let wsPointData1 = new Array(2048).fill(0);
 let bigArrg = new Array(AMOUNTX * AMOUNTY).fill(1);
 let bigArrp = new Array(AMOUNTX * AMOUNTY).fill(1);
 let smoothBig = new Array(AMOUNTX * AMOUNTY).fill(1);
-let oldPositionY = 1400;
+let oldPositionY = 1400
 let ws, configWs;
 let pageClose = false;
 
@@ -196,41 +196,46 @@ function Particles(props) {
   let fSmooth = 0,
     LSmooth = 0;
   useFrame((state, delta) => {
-    // state.camera.lookAt(0,-0,200)
+    // state.camera.lookAt(0,-0,200)  
+
     console.log(state.camera.position)
-    if (props.item == 0) {
-      // state.camera.position.z = 0;
-      // state.camera.position.x = 0;
-      // state.camera.rotation.z = 0;
-      // state.camera.rotation.y = 0;
-      // state.camera.rotation.x = -Math.PI / 2;
-      if(state.camera.position.y<10){
-        state.camera.position.y = 10
+    
 
-      }
-    }
-    if (props.item == 1) {
+    if(props.item == 0){
       // state.camera.position.z = 0
-      // state.camera.position.x = 0;
-      // state.camera.rotation.z = 0;
-      // state.camera.rotation.y = 0;
+      //   state.camera.position.x = 0
+      //   state.camera.rotation.z = 0
+      //   state.camera.rotation.y = 0
       //   state.camera.rotation.x = -Math.PI/2
-      // if(state.camera.position.y<1200){
-      //   state.camera.position.y = 1200
-
+      // if(state.camera.position.y<10){
+      //   state.camera.position.y = 10
+        
       // }
-      if (state.camera.position.y < 0) {
-        state.camera.position.y = 0;
-      }
     }
-    if (props.item == 2) {
-      if (state.camera.position.y < 0) {
-        state.camera.position.y = 0;
-      }
+    if(props.item == 1){
+      // state.camera.position.z = 0
+      //   state.camera.position.x = 0
+        // state.camera.rotation.z = 0
+        // state.camera.rotation.y = 0
+        // state.camera.rotation.x = 0
+      // if(state.camera.position.y<10){
+      //   state.camera.position.y = 10
+      // state.camera.rotation.x = Math.PI ;
+      // state.camera.rotation.y = 0;
+      // state.camera.rotation.z = -Math.PI;
+      // }
+    }
+    if(props.item == 2){
+      // if(state.camera.position.y<500){
+      //   state.camera.position.y = 500
+      // }
       // state.camera.rotation.x = -Math.PI / 8
+      // state.camera.rotation.z = 0
+      //   state.camera.rotation.y = 0
+      //   state.camera.rotation.x = -Math.PI/4
     }
-
-    // console.log(state.camera.position )
+   
+   
     // if (i < 6) {
     //   i++
     //   wsPointData = null;
@@ -253,33 +258,29 @@ function Particles(props) {
       if (props.item === 2) {
         // state.camera.position.z = 2;
         // newState = [-Math.PI / 8, 0, 0];
-        // state.camera.rotation.x = -Math.PI / 2;
-        // state.camera.rotation.y = 0;
-        // state.camera.rotation.z = 0;
+        state.camera.rotation.x = 0
+        state.camera.position.y = 1400
+        state.camera.position.z = 800
+        // console.log(state.camera.rotation)
         // state.scene.children[2].rotation.x = newState[0];
         // state.scene.children[2].rotation.y = newState[1];
         // state.scene.children[2].rotation.z = newState[2];
         // DataFlag = false;
-        state.camera.rotation.x = 0
-        state.camera.position.y = 1400
-        state.camera.position.z = 800
         // return
         // state.camera.rotation.x = -Math.PI / 8
       } else if (props.item === 1) {
         // state.camera.position.z = 0;
         // // if()
-        // state.camera.position.y = 1800;
+        // state.camera.position.y = 1400;
         // state.camera.position.x = 0;
-        // state.camera.position.z = 0;
-        // state.camera.rotation.x = -Math.PI / 2;
-        // state.camera.rotation.y = -Math.PI / 2;
-        // state.camera.rotation.z = 0;
-       
+        // state.camera.rotation.x = Math.PI ;
+        // state.camera.rotation.y = 0;
+        // state.camera.rotation.z = -Math.PI;
         state.camera.rotation.x = -0
         state.camera.position.y = -300
         state.camera.position.z = 2000
-
-        // newState = [-Math.PI / 4, 0, 0];
+        // state.camera.position.x = 500
+        // newState = [-Math.PI / 2, 0, 0];
         // state.scene.children[2].rotation.x = newState[0];
         // state.scene.children[2].rotation.y = newState[1];
         // state.scene.children[2].rotation.z = newState[2];
@@ -302,7 +303,7 @@ function Particles(props) {
         // oldState = [-Math.PI/2,0,0]
       }
     }
-    // console.log(state.camera.rotation)
+    // console.log(state.camera.rotation )
     buttonFlag = false;
     // console.log( state.camera.position.y,cameraY , comp(state.camera.position.y,cameraY))
     // if (
@@ -318,9 +319,11 @@ function Particles(props) {
     //     })
     //   );
     // }
-
-    if (cameraFlag) {
-      console.log("change");
+    
+    if (
+      cameraFlag
+    ) {
+      console.log('change')
       if (configWs.readyState === 1) {
         configWs.send(
           JSON.stringify({
@@ -330,19 +333,19 @@ function Particles(props) {
           })
         );
       }
-    } else if (
-      !comp(state.camera.position.y, oldPositionY) &&
-      configWs.readyState === 1
-    ) {
-      cameraY = state.camera.position.y;
-      configWs.send(
-        JSON.stringify({
-          camera: state.camera.position,
-          cameraRotation: state.camera.rotation,
-          id,
-        })
-      );
-    }
+    }else if (
+        !comp(state.camera.position.y,oldPositionY) && configWs.readyState === 1
+      ) {
+      
+        cameraY = state.camera.position.y
+        configWs.send(
+          JSON.stringify({
+            camera: state.camera.position,
+            cameraRotation: state.camera.rotation,
+            id,
+          })
+        );
+      }
 
     if (cameraFlag && endFlag) {
     }
@@ -432,7 +435,7 @@ function Particles(props) {
     DataFlag = false;
     // } else {
     // }
-    oldPositionY = state.camera.position.y;
+    oldPositionY = state.camera.position.y
   });
 
   //线性插值
@@ -617,7 +620,7 @@ class Anta extends React.Component {
     //   myChart: this.myChart2,
     //   color: '#2ac1e9',
     // })
-    document.title = "大自然";
+    document.title='大自然'
     window.addEventListener("mouseout", () => {});
     document.addEventListener("DOMMouseScroll", () => {}, false);
 
@@ -851,6 +854,7 @@ class Anta extends React.Component {
       // page.style.visibility = "hidden";
       // const qrCode = document.querySelector(".qrCode");
       // qrCode.style.visibility = "hidden";
+
       // const page1 = document.querySelector(".inputcontet");
       // page1.style.transform = `translateY(0)`;
       // page1.style.opacity = 1;
@@ -978,7 +982,7 @@ class Anta extends React.Component {
       numArr32: [],
       isModalVisible: false,
       num: 1,
-      item: 0,
+      item: 2,
       cameraZ: 0,
       cameraFlag: false,
       id: 0,
@@ -988,7 +992,7 @@ class Anta extends React.Component {
       cameraY: window.innerWidth > 1020 ? 1400 : 1000,
       display: false,
       click: false,
-      bed: "X7臻耀系列",
+      bed: 'X7臻耀系列',
       sleep_pos: "--",
       breatheData: 0,
       moveData: 0,
@@ -1013,7 +1017,6 @@ class Anta extends React.Component {
           num: 4,
         },
       ],
-      cameraRotation : [-Math.PI/2,0,0],
       recomItem: 0,
       hardness: 50,
       spine: "",
@@ -1849,7 +1852,7 @@ class Anta extends React.Component {
     }
   }
 
-  showQrcode() {
+  showQrcode(){
     const page = document.querySelector(".reportInput1");
     page.style.visibility = "unset";
     page.style.transform = `translateY(0)`;
@@ -1857,12 +1860,13 @@ class Anta extends React.Component {
     page.style.transition = `all 0.4s`;
   }
 
-  hiddenQrcode() {
+  hiddenQrcode(){
     const page = document.querySelector(".reportInput1");
     page.style.transform = `translateY(40px)`;
     page.style.opacity = 0;
-    page.style.visibility = "hidden";
+    page.style.visibility = 'hidden'
     page.style.transition = `all 0.4s`;
+   
   }
 
   onSexChange(e) {
@@ -2304,7 +2308,7 @@ class Anta extends React.Component {
                   zoom: 1,
                   fov: 65,
                   position: [0, this.state.cameraY, this.state.cameraZ],
-                  rotation: this.state.cameraRotation,
+                  rotation: [0, 0, 0],
                   near: 1,
                   far: 10000,
                 }}
@@ -2597,7 +2601,7 @@ class Anta extends React.Component {
             this.hiddenRealReport();
           }}
         >
-          <div
+           <div
             className="reportInput1"
             onClick={(event) => {
               this.hiddenQrcode();
@@ -2612,7 +2616,7 @@ class Anta extends React.Component {
             >
               <div className="qrCode">
                 <QRCode
-                  value={`http://sensor.bodyta.com/report?bedName=${
+                  value={`http://192.168.31.40/#/report?bedName=${
                     this.state.recomBed[0]?.bedName
                   }&bedImg=${this.state.recomBed[0]?.img}&bedNum=${
                     this.state.recomBed[0]?.num
@@ -2632,6 +2636,7 @@ class Anta extends React.Component {
               event.stopPropagation();
             }}
           >
+            
             <div className="reportTitle">
               <img src={nature} alt="" />
               <img src={titleRight} alt="" />
@@ -2717,7 +2722,7 @@ class Anta extends React.Component {
             <Button
               onClick={(event) => {
                 // this.getBlobPng();
-                this.showQrcode();
+                this.showQrcode()
                 event.stopPropagation();
               }}
             >
